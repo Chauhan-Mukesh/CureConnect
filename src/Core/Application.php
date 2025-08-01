@@ -114,7 +114,7 @@ class Application
                     'environment' => 'testing',
                     'debug' => true,
                     'base_url' => 'http://localhost:8001',
-                    'assets_url' => 'http://localhost:8001/assets',
+                    'assets_url' => 'http://localhost:8001',
                     'templates_path' => $this->rootPath . '/templates'
                 ],
                 'database' => [
@@ -216,7 +216,7 @@ class Application
         // Add global variables
         if (method_exists($this->twig, 'addGlobal')) {
             $this->twig->addGlobal('app_name', $this->config['app']['name'] ?? 'CureConnect');
-            $this->twig->addGlobal('assets_url', $this->config['app']['assets_url'] ?? '/assets');
+            $this->twig->addGlobal('assets_url', $this->config['app']['assets_url'] ?? '');
             $this->twig->addGlobal('base_url', $this->config['app']['base_url'] ?? '/');
         }
     }
@@ -375,7 +375,7 @@ class Application
                 'debug' => true,
                 'timezone' => 'Asia/Kolkata',
                 'base_url' => 'http://localhost/CureConnect',
-                'assets_url' => 'http://localhost/CureConnect/assets',
+                'assets_url' => 'http://localhost/CureConnect',
                 'templates_path' => 'templates',
                 'cache_path' => 'var/cache',
                 'logs_path' => 'var/logs'
