@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ app.translator.getLanguageDirection(lang) }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="{{ app_name }}">
+
+    <!-- SEO Meta Tags -->
+    <title>{{ meta.title|default('Medical Tourism in India - ' ~ app_name) }}</title>
+    <meta name="description" content="{{ meta.description|default('World-class healthcare in India at affordable costs') }}">
+    {% if meta.keywords %}
+        <meta name="keywords" content="{{ meta.keywords }}">
+    {% endif %}
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="{{ meta.og_title|default(meta.title) }}">
+    <meta property="og:description" content="{{ meta.og_description|default(meta.description) }}">
+    <meta property="og:url" content="{{ meta.og_url|default(request.uri) }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ app_name }}">
+    {% if meta.og_image %}
+        <meta property="og:image" content="{{ meta.og_image }}">
+    {% endif %}
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ meta.twitter_title|default(meta.title) }}">
+    <meta name="twitter:description" content="{{ meta.twitter_description|default(meta.description) }}">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ assets_url }}/css/theme.css">
+    <link rel="stylesheet" href="{{ assets_url }}/css/components.css">
+    <link rel="stylesheet" href="{{ assets_url }}/css/animations.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ assets_url }}/images/logo_100x100.svg">
+    <link rel="alternate icon" href="{{ assets_url }}/images/logo_100x100.svg">
+    <link rel="mask-icon" href="{{ assets_url }}/images/logo_100x100.svg" color="#2c5aa0">
+
+    {% block head %}{% endblock %}
+</head>
+<body class="{{ body_class|default('') }}">
+
+    {% include 'shared/header.html.twig' %}
+
+    {% block main %}{% endblock %}
+
+    {% include 'shared/footer.html.twig' %}
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="{{ assets_url }}/js/core.js"></script>
+
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>

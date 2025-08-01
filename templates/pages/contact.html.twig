@@ -1,0 +1,226 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+<main id="main-content">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-custom">
+        <div class="container">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{{ base_url }}">Home</a></li>
+                <li class="breadcrumb-item active">Contact</li>
+            </ol>
+        </div>
+    </nav>
+
+    <!-- Contact Hero -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4 fade-in-up">
+                        Get Free Medical Consultation
+                    </h1>
+                    <p class="lead fade-in-up" style="animation-delay: 0.2s;">
+                        Contact our medical experts for personalized treatment recommendations and cost estimates
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form & Info -->
+    <section class="py-5">
+        <div class="container">
+            {% if message %}
+                <div class="alert alert-{{ message_type == 'success' ? 'success' : 'danger' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+
+            <div class="row">
+                <!-- Contact Form -->
+                <div class="col-lg-8 mb-5">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="card-title mb-0">Send Us Your Inquiry</h3>
+                        </div>
+                        <div class="card-body p-4">
+                            <form method="POST" class="needs-validation" novalidate>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">Full Name *</label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                        <div class="invalid-feedback">
+                                            Please provide your full name.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email Address *</label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid email address.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="phone" class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control" id="phone" name="phone">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="country" class="form-label">Country</label>
+                                        <select class="form-select" id="country" name="country">
+                                            <option value="">Select Country</option>
+                                            <option value="USA">United States</option>
+                                            <option value="UK">United Kingdom</option>
+                                            <option value="Canada">Canada</option>
+                                            <option value="Australia">Australia</option>
+                                            <option value="Germany">Germany</option>
+                                            <option value="UAE">UAE</option>
+                                            <option value="Bangladesh">Bangladesh</option>
+                                            <option value="Pakistan">Pakistan</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="treatment_interest" class="form-label">Treatment of Interest</label>
+                                    <select class="form-select" id="treatment_interest" name="treatment_interest">
+                                        <option value="">Select Treatment</option>
+                                        <option value="Cardiology">Cardiology</option>
+                                        <option value="Orthopedics">Orthopedics</option>
+                                        <option value="Oncology">Oncology</option>
+                                        <option value="Fertility">Fertility</option>
+                                        <option value="Cosmetic Surgery">Cosmetic Surgery</option>
+                                        <option value="Neurology">Neurology</option>
+                                        <option value="Gastroenterology">Gastroenterology</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="message" class="form-label">Message *</label>
+                                    <textarea class="form-control" id="message" name="message" rows="5" required placeholder="Please describe your medical requirements, preferred dates, and any specific questions..."></textarea>
+                                    <div class="invalid-feedback">
+                                        Please provide your message.
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                <button type="submit" name="submit_inquiry" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>
+                                    Send Inquiry
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="col-lg-4">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-light">
+                            <h4 class="card-title mb-0">Contact Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="contact-info">
+                                <div class="d-flex mb-3">
+                                    <i class="fas fa-map-marker-alt text-primary me-3 mt-1"></i>
+                                    <div>
+                                        <strong>Address</strong><br>
+                                        123 Medical Plaza<br>
+                                        New Delhi, India 110001
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-3">
+                                    <i class="fas fa-phone text-primary me-3 mt-1"></i>
+                                    <div>
+                                        <strong>Phone</strong><br>
+                                        +91-1800-123-4567<br>
+                                        <small class="text-muted">24/7 Support Available</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-3">
+                                    <i class="fas fa-envelope text-primary me-3 mt-1"></i>
+                                    <div>
+                                        <strong>Email</strong><br>
+                                        info@cureconnect.in<br>
+                                        support@cureconnect.in
+                                    </div>
+                                </div>
+                                <div class="d-flex">
+                                    <i class="fas fa-clock text-primary me-3 mt-1"></i>
+                                    <div>
+                                        <strong>Business Hours</strong><br>
+                                        Mon-Sun: 24/7<br>
+                                        <small class="text-muted">Emergency support available</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light">
+                            <h4 class="card-title mb-0">Quick Links</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <a href="{{ base_url }}/government-schemes" class="text-decoration-none">
+                                        <i class="fas fa-passport me-2 text-primary"></i>
+                                        Medical Visa Guide
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ base_url }}/treatments" class="text-decoration-none">
+                                        <i class="fas fa-procedures me-2 text-primary"></i>
+                                        Treatment Costs
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ base_url }}/hospitals" class="text-decoration-none">
+                                        <i class="fas fa-hospital me-2 text-primary"></i>
+                                        Hospital Directory
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ base_url }}/articles" class="text-decoration-none">
+                                        <i class="fas fa-newspaper me-2 text-primary"></i>
+                                        Medical Articles
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Form validation
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+</script>
+{% endblock %}

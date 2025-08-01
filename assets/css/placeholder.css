@@ -1,0 +1,26 @@
+/* Simple placeholder images for testing */
+body {
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect width="1200" height="600" fill="%23f8f9fa"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-family="Arial, sans-serif" font-size="24" fill="%236c757d">Medical Tourism Hero Image</text></svg>') no-repeat center center;
+}
+
+/* Placeholder for missing images */
+img[data-src] {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    border: 1px solid #ced4da;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    position: relative;
+}
+
+img[data-src]::before {
+    content: "Image Loading...";
+    color: #6c757d;
+    font-size: 1rem;
+    font-weight: 500;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

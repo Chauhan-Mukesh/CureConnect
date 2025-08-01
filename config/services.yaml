@@ -1,0 +1,48 @@
+# Services Configuration
+services:
+  # Translation Service
+  translation:
+    cache_enabled: true
+    cache_lifetime: 3600  # 1 hour
+
+  # Security Service
+  security:
+    password_hash_algo: "argon2id"
+    csrf_token_length: 32
+    rate_limiting:
+      enabled: true
+      max_attempts: 5
+      time_window: 300  # 5 minutes
+
+  # External APIs
+  apis:
+    google:
+      maps_api_key: ""
+      analytics_id: ""
+      adsense_client_id: ""
+
+    openai:
+      api_key: ""
+      model: "gpt-3.5-turbo"
+      max_tokens: 150
+
+  # File Upload
+  uploads:
+    max_file_size: 5242880  # 5MB
+    allowed_extensions: ["jpg", "jpeg", "png", "pdf", "doc", "docx"]
+    image_quality: 85
+
+  # Caching
+  cache:
+    enabled: true
+    driver: "file"  # file, redis, memcached
+    ttl: 3600  # Default TTL in seconds
+
+  # Logging
+  logging:
+    level: "info"  # debug, info, warning, error
+    channels:
+      - "app"
+      - "security"
+      - "database"
+

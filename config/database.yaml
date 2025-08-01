@@ -1,0 +1,21 @@
+# Database Configuration
+database:
+  host: "localhost"
+  port: 3306
+  name: "cureconnect_db"
+  username: "root"
+  password: ""
+  charset: "utf8mb4"
+
+  # Connection options
+  options:
+    persistent: false
+    timeout: 30
+    retry_attempts: 3
+
+  # Query settings
+  query:
+    fetch_mode: "assoc"
+    error_mode: "exception"
+    emulate_prepares: false
+
