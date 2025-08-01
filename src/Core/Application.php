@@ -268,6 +268,10 @@ class Application
             '/government-schemes' => [
                 'controller' => 'CureConnect\Controller\PageController',
                 'method' => 'governmentSchemes'
+            ],
+            '/appointments' => [
+                'controller' => 'CureConnect\Controller\AppointmentController',
+                'method' => 'index'
             ]
         ];
     }
