@@ -27,9 +27,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Dotenv\Dotenv;
 
 // Load environment variables
-if (file_exists(__DIR__ . '/../.env')) {
+if (file_exists(__DIR__ . '/../.env') && class_exists('Dotenv\Dotenv')) {
     $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
     $dotenv->load();
+} elseif (file_exists(__DIR__ . '/../.env')) {
+    // Simple .env parsing fallback when Dotenv is not available
+    $lines = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) {
+            continue;
+        }
+        if (strpos($line, '=') !== false) {
+            list($name, $value) = explode('=', $line, 2);
+            $_ENV[trim($name)] = trim($value);
+        }
+    }
 }
 
 // Set error reporting based on environment

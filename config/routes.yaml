@@ -1,0 +1,42 @@
+# Routes Configuration for CureConnect Medical Tourism Portal
+
+home:
+  path: /
+  controller: CureConnect\Controller\HomeController::index
+  methods: [GET]
+
+about:
+  path: /about
+  controller: CureConnect\Controller\PageController::about
+  methods: [GET]
+
+contact:
+  path: /contact
+  controller: CureConnect\Controller\PageController::contact
+  methods: [GET, POST]
+
+gallery:
+  path: /gallery
+  controller: CureConnect\Controller\PageController::gallery
+  methods: [GET]
+
+government_schemes:
+  path: /government-schemes
+  controller: CureConnect\Controller\PageController::governmentSchemes
+  methods: [GET]
+
+# Article page - can be used for medical news/blog articles
+article:
+  path: /article/{slug}
+  controller: CureConnect\Controller\PageController::article
+  methods: [GET]
+  requirements:
+    slug: '[a-z0-9\-]+'
+  defaults:
+    slug: 'welcome'
+
+# Legacy route support for existing URLs
+contact_us:
+  path: /contact-us
+  controller: CureConnect\Controller\PageController::contact
+  methods: [GET, POST]
