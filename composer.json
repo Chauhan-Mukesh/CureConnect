@@ -45,9 +45,6 @@
   "prefer-stable": true,
   "config": {
     "secure-http": false,
-    "disable-tls": true,
-    "github-oauth": {
-        "github.com": "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"
-    }
+    "disable-tls": true
   }
 }
