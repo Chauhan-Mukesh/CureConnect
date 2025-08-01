@@ -23,6 +23,11 @@ use CureConnect\Core\Security;
 class TranslationService
 {
     /**
+     * Path to language files
+     */
+    private static string $langPath = '';
+    
+    /**
      * Supported languages
      */
     private const SUPPORTED_LANGUAGES = ['en', 'bn', 'ar'];
@@ -36,6 +41,14 @@ class TranslationService
      * Cache for loaded translations
      */
     private static array $translationCache = [];
+
+    /**
+     * Initialize the translation service with language path
+     */
+    public static function init(string $langPath): void
+    {
+        self::$langPath = rtrim($langPath, '/');
+    }
 
     /**
      * Get current language from session or default
@@ -124,11 +137,11 @@ class TranslationService
             return self::$translationCache[$language];
         }
 
-        $translationFile = LANG_PATH . "/{$language}.json";
+        $translationFile = self::$langPath . "/{$language}.json";
 
         if (!file_exists($translationFile)) {
             // Fallback to default language
-            $translationFile = LANG_PATH . "/" . self::DEFAULT_LANGUAGE . ".json";
+            $translationFile = self::$langPath . "/" . self::DEFAULT_LANGUAGE . ".json";
         }
 
         if (!file_exists($translationFile)) {

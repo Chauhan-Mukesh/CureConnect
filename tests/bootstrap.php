@@ -8,8 +8,12 @@
 // Define constants for testing
 define('RUNNING_TESTS', true);
 
-// Load composer autoloader
-require_once __DIR__ . '/../vendor/autoload.php';
+// Load autoloader
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    require_once __DIR__ . '/../vendor/autoload.php';
+} else {
+    require_once __DIR__ . '/../autoload.php';
+}
 
 // Set error reporting for tests
 error_reporting(E_ALL);
@@ -22,6 +26,18 @@ date_default_timezone_set('UTC');
 if (class_exists('\Dotenv\Dotenv') && file_exists(__DIR__ . '/../.env.testing')) {
     $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/../', '.env.testing');
     $dotenv->load();
+} elseif (file_exists(__DIR__ . '/../.env')) {
+    // Simple .env parsing fallback when Dotenv is not available
+    $lines = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) {
+            continue;
+        }
+        if (strpos($line, '=') !== false) {
+            list($name, $value) = explode('=', $line, 2);
+            $_ENV[trim($name)] = trim($value);
+        }
+    }
 }
 
 // Test helper functions

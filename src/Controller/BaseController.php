@@ -14,7 +14,6 @@ namespace CureConnect\Controller;
 
 use CureConnect\Core\Application;
 use CureConnect\Services\TranslationService;
-use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class BaseController
 {
     protected Application $app;
-    protected Environment $twig;
+    protected $twig; // Allow both Twig\Environment and SimpleTwigFallback
     protected TranslationService $translator;
     protected Request $request;
 

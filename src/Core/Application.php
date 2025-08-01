@@ -115,7 +115,7 @@ class Application
                     'debug' => true,
                     'base_url' => 'http://localhost',
                     'assets_url' => 'http://localhost/assets',
-                    'templates_path' => 'templates'
+                    'templates_path' => $this->rootPath . '/templates'
                 ],
                 'database' => [
                     'driver' => 'sqlite',
@@ -226,6 +226,8 @@ class Application
      */
     private function initializeTranslator(): void
     {
+        // Initialize with language path
+        TranslationService::init($this->rootPath . '/lang');
         $this->translator = new TranslationService();
     }
 
@@ -433,11 +435,71 @@ class SimpleTwigFallback
 
     private function parseTemplate(string $content, array $variables): string
     {
+        // Handle template inheritance
+        if (preg_match('/\{% extends [\'"](.+?)[\'"] %\}/', $content, $matches)) {
+            $baseTemplate = $matches[1];
+            $baseContent = $this->loadTemplate($baseTemplate);
+            
+            // Extract block content from child template
+            $blocks = $this->extractBlocks($content);
+            
+            // Replace blocks in base template
+            $content = $this->replaceBlocks($baseContent, $blocks);
+        }
+        
+        // Remove remaining Twig syntax that we can't process
+        $content = preg_replace('/\{% .*? %\}/', '', $content);
+        $content = preg_replace('/\{\# .*? \#\}/', '', $content);
+        
+        // Process simple variables
         foreach ($variables as $key => $value) {
             if (is_scalar($value) || (is_object($value) && method_exists($value, '__toString'))) {
                 $content = str_replace('{{ ' . $key . ' }}', (string)$value, $content);
+            } elseif (is_array($value)) {
+                // Handle array access like {{ array.key }}
+                foreach ($value as $subKey => $subValue) {
+                    if (is_scalar($subValue)) {
+                        $content = str_replace('{{ ' . $key . '.' . $subKey . ' }}', (string)$subValue, $content);
+                    }
+                }
             }
         }
+        
+        // Clean up remaining variables that couldn't be processed
+        $content = preg_replace('/\{\{ .*? \}\}/', '', $content);
+        
         return $content;
+    }
+    
+    private function loadTemplate(string $template): string
+    {
+        $templateFile = $this->templatesPath . '/' . $template;
+        if (!file_exists($templateFile)) {
+            throw new \Exception("Base template not found: {$templateFile}");
+        }
+        return file_get_contents($templateFile);
+    }
+    
+    private function extractBlocks(string $content): array
+    {
+        $blocks = [];
+        preg_match_all('/\{% block (\w+) %\}(.*?)\{% endblock %\}/s', $content, $matches, PREG_SET_ORDER);
+        
+        foreach ($matches as $match) {
+            $blocks[$match[1]] = $match[2];
+        }
+        
+        return $blocks;
+    }
+    
+    private function replaceBlocks(string $baseContent, array $blocks): string
+    {
+        foreach ($blocks as $blockName => $blockContent) {
+            $pattern = '/\{% block ' . $blockName . ' %\}.*?\{% endblock %\}/s';
+            $replacement = '{% block ' . $blockName . ' %}' . $blockContent . '{% endblock %}';
+            $baseContent = preg_replace($pattern, $replacement, $baseContent);
+        }
+        
+        return $baseContent;
     }
 }
