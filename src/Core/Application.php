@@ -132,23 +132,46 @@ class Application
     {
         if ($this->database === null) {
             $dbConfig = $this->config['database'] ?? [];
-            $dsn = sprintf(
-                'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
-                $dbConfig['host'] ?? 'localhost',
-                $dbConfig['port'] ?? 3306,
-                $dbConfig['name'] ?? 'cureconnect_db'
-            );
-
-            $this->database = new PDO(
-                $dsn,
-                $dbConfig['username'] ?? 'root',
-                $dbConfig['password'] ?? '',
-                [
+            $driver = $dbConfig['driver'] ?? 'mysql';
+            
+            if ($driver === 'sqlite') {
+                // SQLite configuration
+                $database = $dbConfig['name'] ?? ':memory:';
+                if ($database !== ':memory:' && !str_starts_with($database, '/')) {
+                    // Relative path, make it absolute
+                    $database = $this->rootPath . '/' . $database;
+                }
+                $dsn = 'sqlite:' . $database;
+                
+                $this->database = new PDO($dsn, null, null, [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                     PDO::ATTR_EMULATE_PREPARES => false
-                ]
-            );
+                ]);
+                
+                // Enable foreign key constraints for SQLite
+                $this->database->exec('PRAGMA foreign_keys = ON');
+                
+            } else {
+                // MySQL configuration (default)
+                $dsn = sprintf(
+                    'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
+                    $dbConfig['host'] ?? 'localhost',
+                    $dbConfig['port'] ?? 3306,
+                    $dbConfig['name'] ?? 'cureconnect_db'
+                );
+
+                $this->database = new PDO(
+                    $dsn,
+                    $dbConfig['username'] ?? 'root',
+                    $dbConfig['password'] ?? '',
+                    [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                        PDO::ATTR_EMULATE_PREPARES => false
+                    ]
+                );
+            }
         }
     }
 

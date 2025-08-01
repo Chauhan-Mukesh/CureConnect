@@ -1,0 +1,24 @@
+# Test Database Configuration (SQLite3)
+database:
+  driver: "sqlite"
+  host: ""
+  port: ""
+  name: ":memory:"  # Use in-memory database for testing
+  username: ""
+  password: ""
+  charset: "utf8"
+  
+  # Alternative file-based SQLite for persistent testing
+  # name: "database/test.sqlite"
+
+  # Connection options
+  options:
+    persistent: false
+    timeout: 30
+    retry_attempts: 3
+
+  # Query settings
+  query:
+    fetch_mode: "assoc"
+    error_mode: "exception"
+    emulate_prepares: false
