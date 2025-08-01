@@ -8,7 +8,7 @@ app:
 
   # URLs and Paths
   base_url: "http://localhost/CureConnect"
-  assets_url: "http://localhost/CureConnect/assets"
+  assets_url: "http://localhost/CureConnect"
   uploads_url: "http://localhost/CureConnect/uploads"
 
   # File Paths

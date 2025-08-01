@@ -35,10 +35,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ assets_url }}/css/theme.css">
-    <link rel="stylesheet" href="{{ assets_url }}/css/components.css">
-    <link rel="stylesheet" href="{{ assets_url }}/css/animations.css">
-    <link rel="stylesheet" href="{{ assets_url }}/css/blog-theme.css">
+    <link rel="stylesheet" href="{{ assets_url }}/css/app.css">
+    <link rel="stylesheet" href="{{ assets_url }}/css/blog-theme.css">{# Keep blog-specific styles separate #}
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ assets_url }}/images/logo_100x100.svg">
@@ -59,8 +57,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Custom JS -->
-    <script src="{{ assets_url }}/js/core.js"></script>
-    <script src="{{ assets_url }}/js/blog-theme.js"></script>
+    <script src="{{ assets_url }}/js/app.js"></script>
 
     {% block scripts %}{% endblock %}
 

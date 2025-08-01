@@ -56,7 +56,7 @@ try {
     
     $medicalTourismData = [
         'app_name' => 'CureConnect Medical Tourism Portal',
-        'assets_url' => '/assets',
+        'assets_url' => '',
         'base_url' => '/',
         'lang' => 'en',
         'meta' => [
@@ -106,8 +106,8 @@ try {
     echo "🎨 Verifying CSS/JS Organization...\n";
     
     // Check extracted styles
-    $cssFile = __DIR__ . '/assets/css/blog-theme.css';
-    $jsFile = __DIR__ . '/assets/js/blog-theme.js';
+    $cssFile = __DIR__ . '/public/css/blog-theme.css';
+    $jsFile = __DIR__ . '/public/js/app.js';
     
     if (file_exists($cssFile)) {
         $cssSize = filesize($cssFile);
@@ -190,8 +190,8 @@ try {
     echo "🏷️  CureConnect Branding Verification...\n";
     
     $logoFiles = [
-        'assets/images/logo_100x100.svg' => 'Favicon (100x100)',
-        'assets/images/logo_250x150.svg' => 'Main Logo (250x150)'
+        'public/images/logo_100x100.svg' => 'Favicon (100x100)',
+        'public/images/logo_250x150.svg' => 'Main Logo (250x150)'
     ];
     
     foreach ($logoFiles as $path => $description) {

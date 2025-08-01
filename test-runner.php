@@ -166,7 +166,7 @@ class SimpleTestRunner
         echo "\nTesting CSS/JS Extraction...\n";
         
         // Test that CSS file exists and has content
-        $cssFile = __DIR__ . '/assets/css/blog-theme.css';
+        $cssFile = __DIR__ . '/public/css/blog-theme.css';
         $this->assert(file_exists($cssFile), "blog-theme.css exists");
         
         if (file_exists($cssFile)) {
@@ -177,7 +177,7 @@ class SimpleTestRunner
         }
         
         // Test that JS file exists and has content
-        $jsFile = __DIR__ . '/assets/js/blog-theme.js';
+        $jsFile = __DIR__ . '/public/js/app.js';
         $this->assert(file_exists($jsFile), "blog-theme.js exists");
         
         if (file_exists($jsFile)) {

@@ -95,7 +95,7 @@ app:
   environment: "test"
   debug: true
   base_url: "http://localhost"
-  assets_url: "http://localhost/assets"
+  assets_url: "http://localhost"
   templates_path: "templates"
 YAML;
         file_put_contents($this->tempConfigDir . '/app.yaml', $appConfig);
