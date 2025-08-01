@@ -16,6 +16,8 @@ class CureConnect {
         this.setupSearchFunctionality();
         this.setupCounters();
         this.setupLazyLoading();
+        this.setupThemeToggle();
+        this.setupNavbarScrollEffect();
         this.bindEvents();
     }
 
@@ -360,6 +362,98 @@ class CureConnect {
         if (overlay) {
             overlay.remove();
         }
+    }
+
+    // Theme Toggle Functionality
+    setupThemeToggle() {
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        if (!themeToggleBtn) return;
+
+        const themeToggleIcon = themeToggleBtn.querySelector('.theme-toggle-icon');
+        const htmlEl = document.documentElement;
+        const moonIcon = 'fas fa-moon';
+        const sunIcon = 'fas fa-sun';
+
+        const updateIcon = (theme) => {
+            if (!themeToggleIcon) return;
+            
+            themeToggleIcon.classList.remove('animating');
+            if (theme === 'dark') {
+                themeToggleIcon.className = `theme-toggle-icon ${moonIcon}`;
+            } else {
+                themeToggleIcon.className = `theme-toggle-icon ${sunIcon}`;
+            }
+        };
+
+        const toggleTheme = () => {
+            const newTheme = htmlEl.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            htmlEl.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            return newTheme;
+        };
+
+        themeToggleBtn.addEventListener('click', (e) => {
+            if (themeToggleIcon) {
+                themeToggleIcon.classList.add('animating');
+            }
+            
+            if (!document.startViewTransition) {
+                const newTheme = toggleTheme();
+                updateIcon(newTheme);
+                return;
+            }
+
+            const x = e.clientX;
+            const y = e.clientY;
+            const endRadius = Math.hypot(
+                Math.max(x, window.innerWidth - x),
+                Math.max(y, window.innerHeight - y)
+            );
+
+            const transition = document.startViewTransition(() => {
+                const newTheme = toggleTheme();
+                updateIcon(newTheme);
+            });
+
+            transition.ready.then(() => {
+                const clipPath = [
+                    `circle(0px at ${x}px ${y}px)`,
+                    `circle(${endRadius}px at ${x}px ${y}px)`,
+                ];
+                document.documentElement.animate(
+                    {
+                        clipPath: htmlEl.getAttribute('data-bs-theme') === 'dark' ? 
+                            [...clipPath].reverse() : clipPath,
+                    },
+                    {
+                        duration: 500,
+                        easing: 'cubic-bezier(0.65, 0, 0.35, 1)',
+                        pseudoElement: htmlEl.getAttribute('data-bs-theme') === 'dark' ? 
+                            '::view-transition-old(root)' : '::view-transition-new(root)',
+                    }
+                );
+            });
+        });
+        
+        // Initialize theme from localStorage or system preference
+        const savedTheme = localStorage.getItem('theme') || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        htmlEl.setAttribute('data-bs-theme', savedTheme);
+        updateIcon(savedTheme);
+    }
+
+    // Navbar Scroll Effect
+    setupNavbarScrollEffect() {
+        const navbar = document.querySelector('.navbar');
+        if (!navbar) return;
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
     }
 }
 

@@ -113,8 +113,8 @@ class Application
                     'name' => 'CureConnect Test',
                     'environment' => 'testing',
                     'debug' => true,
-                    'base_url' => 'http://localhost',
-                    'assets_url' => 'http://localhost/assets',
+                    'base_url' => 'http://localhost:8001',
+                    'assets_url' => 'http://localhost:8001/assets',
                     'templates_path' => $this->rootPath . '/templates'
                 ],
                 'database' => [
