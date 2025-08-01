@@ -1,7 +1,7 @@
-.env
-.env.local
+!.env
+!.env.local
 .env.*.local
-/vendor/
+!/vendor/
 /node_modules/
 /coverage/
 /logs/*.log
