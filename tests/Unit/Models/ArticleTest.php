@@ -102,9 +102,11 @@ class ArticleTest extends TestCase
             $article->create($data);
         }
         
-        $articles = $article->getPublished();
+        $result = $article->getPublished();
+        $articles = $result['articles'];
         
-        $this->assertIsArray($articles);
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('articles', $result);
         $this->assertCount(5, $articles); // 3 created + 2 from seed data
     }
 

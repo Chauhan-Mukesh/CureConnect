@@ -27,9 +27,9 @@ class Application
     private string $rootPath;
 
     /**
-     * The constructor is private to enforce the singleton pattern.
+     * The constructor can be public for testing purposes.
      */
-    private function __construct(string $rootPath)
+    public function __construct(string $rootPath)
     {
         $this->rootPath = $rootPath;
 

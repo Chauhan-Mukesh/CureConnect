@@ -61,5 +61,16 @@ function createTestApplication(): \CureConnect\Core\Application
     $_ENV['DB_DRIVER'] = 'sqlite';
     $_ENV['DB_NAME'] = ':memory:';
     
-    return \CureConnect\Core\Application::boot(__DIR__ . '/../');
+    // Create a unique database for each test run
+    $database = createTestDatabase();
+    
+    $app = new \CureConnect\Core\Application(__DIR__ . '/../');
+    
+    // Override the database connection with our test database
+    $reflection = new ReflectionClass($app);
+    $databaseProperty = $reflection->getProperty('database');
+    $databaseProperty->setAccessible(true);
+    $databaseProperty->setValue($app, $database);
+    
+    return $app;
 }

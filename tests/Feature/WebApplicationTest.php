@@ -11,17 +11,8 @@ class WebApplicationTest extends TestCase
 
     protected function setUp(): void
     {
-        // Set up test environment
-        $_ENV['APP_ENV'] = 'testing';
-        $_ENV['DB_DRIVER'] = 'sqlite';
-        $_ENV['DB_NAME'] = ':memory:';
-        
-        $this->app = Application::boot(__DIR__ . '/../../');
-        
-        // Initialize test database
-        $database = $this->app->getDatabase();
-        $schema = file_get_contents(__DIR__ . '/../../database/schema-sqlite.sql');
-        $database->exec($schema);
+        // Use createTestApplication from bootstrap which sets up fresh database
+        $this->app = createTestApplication();
     }
 
     public function testApplicationBootsSuccessfully(): void
