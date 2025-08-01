@@ -62,6 +62,11 @@ class ApplicationTest extends TestCase
     {
         $emptyDir = sys_get_temp_dir() . '/empty_config_' . uniqid();
         mkdir($emptyDir, 0777, true);
+        
+        // Create templates directory to prevent Twig errors
+        $templatesDir = $emptyDir . '/templates';
+        mkdir($templatesDir, 0777, true);
+        file_put_contents($templatesDir . '/base.html.twig', '<html><head><title>Test</title></head><body>{% block content %}{% endblock %}</body></html>');
 
         $app = new Application($emptyDir);
         $config = $app->getConfig();
@@ -69,7 +74,7 @@ class ApplicationTest extends TestCase
         $this->assertArrayHasKey('app', $config);
         $this->assertStringContainsString('CureConnect', $config['app']['name']);
 
-        rmdir($emptyDir);
+        $this->removeDirectory($emptyDir);
     }
 
     public function testGetTranslator(): void
@@ -91,6 +96,13 @@ class ApplicationTest extends TestCase
 
     private function createTestConfigFiles(): void
     {
+        // Create templates directory
+        $templatesDir = $this->tempConfigDir . '/templates';
+        mkdir($templatesDir, 0777, true);
+        
+        // Create a basic template file
+        file_put_contents($templatesDir . '/base.html.twig', '<html><head><title>Test</title></head><body>{% block content %}{% endblock %}</body></html>');
+
         // Create app.yaml
         $appConfig = <<<YAML
 app:

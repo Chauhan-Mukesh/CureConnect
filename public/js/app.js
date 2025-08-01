@@ -116,7 +116,7 @@ class CureConnect {
         if (query.length < 2) return;
         
         // Implement search logic here
-        console.log('Searching for:', query);
+        // TODO: Add actual search implementation for: query
     }
 
     // Animated Counters

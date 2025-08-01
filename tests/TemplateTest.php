@@ -1,20 +1,30 @@
 <?php
+
+declare(strict_types=1);
+
+namespace CureConnect\Tests;
+
+use PHPUnit\Framework\TestCase;
+use CureConnect\Core\Application;
+
 /**
- * Basic template test
+ * Template Tests
+ *
+ * @package CureConnect\Tests
+ * @author  CureConnect Team
+ * @since   1.0.0
  */
-
-require_once __DIR__ . '/bootstrap.php';
-
-class TemplateTest
+class TemplateTest extends TestCase
 {
-    private $app;
+    private Application $app;
     
-    public function __construct()
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->app = createTestApplication();
     }
     
-    public function testTemplatesExist()
+    public function testTemplatesExist(): void
     {
         $templates = [
             'base.html.twig',
@@ -28,22 +38,15 @@ class TemplateTest
             'shared/footer.html.twig'
         ];
         
-        $results = [];
-        $templatesPath = $this->app->getConfig()['app']['templates_path'];
+        $templatesPath = dirname(__DIR__) . '/templates';
         
         foreach ($templates as $template) {
             $filePath = $templatesPath . '/' . $template;
-            if (file_exists($filePath)) {
-                $results[$template] = 'OK';
-            } else {
-                $results[$template] = 'FAILED: File not found';
-            }
+            $this->assertFileExists($filePath, "Template file {$template} should exist");
         }
-        
-        return $results;
     }
     
-    public function testTemplateRender()
+    public function testTemplateRender(): void
     {
         $sampleData = [
             'app_name' => 'CureConnect Test',
@@ -52,64 +55,25 @@ class TemplateTest
             'lang' => 'en'
         ];
         
-        $results = [];
         $templates = ['pages/home.html.twig', 'pages/about.html.twig', 'pages/contact.html.twig'];
         $twig = $this->app->getTwig();
         
         foreach ($templates as $template) {
             try {
                 $output = $twig->render($template, $sampleData);
-                $results[$template] = strlen($output) > 100 ? 'OK' : 'FAILED: Output too short';
-            } catch (Exception $e) {
-                $results[$template] = 'FAILED: ' . $e->getMessage();
+                $this->assertGreaterThan(100, strlen($output), "Template {$template} should render content longer than 100 characters");
+            } catch (\Exception $e) {
+                $this->fail("Template {$template} failed to render: " . $e->getMessage());
             }
         }
-        
-        return $results;
     }
     
-    public function runAllTests()
+    public function testBaseTemplateExists(): void
     {
-        echo "=== Template Existence Tests ===\n";
-        $existenceResults = $this->testTemplatesExist();
-        foreach ($existenceResults as $template => $result) {
-            echo "$template: $result\n";
-        }
+        $baseTemplate = dirname(__DIR__) . '/templates/base.html.twig';
+        $this->assertFileExists($baseTemplate, 'Base template should exist');
         
-        echo "\n=== Template Render Tests ===\n";
-        $renderResults = $this->testTemplateRender();
-        foreach ($renderResults as $template => $result) {
-            echo "$template: $result\n";
-        }
-        
-        // Summary
-        $totalTests = count($existenceResults) + count($renderResults);
-        $passedTests = 0;
-        
-        foreach (array_merge($existenceResults, $renderResults) as $result) {
-            if ($result === 'OK') {
-                $passedTests++;
-            }
-        }
-        
-        echo "\n=== Summary ===\n";
-        echo "Total tests: $totalTests\n";
-        echo "Passed: $passedTests\n";
-        echo "Failed: " . ($totalTests - $passedTests) . "\n";
-        
-        if ($passedTests === $totalTests) {
-            echo "All tests passed! ✓\n";
-            return true;
-        } else {
-            echo "Some tests failed! ✗\n";
-            return false;
-        }
+        $content = file_get_contents($baseTemplate);
+        $this->assertStringContainsString('{% block main %}', $content, 'Base template should contain main block');
     }
-}
-
-// Run tests if script is executed directly
-if (basename(__FILE__) === basename($_SERVER['SCRIPT_NAME'])) {
-    $test = new TemplateTest();
-    $success = $test->runAllTests();
-    exit($success ? 0 : 1);
 }
