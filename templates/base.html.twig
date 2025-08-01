@@ -29,14 +29,24 @@
     <meta name="twitter:description" content="{{ meta.twitter_description|default(meta.description) }}">
 
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Font Awesome -->
+    <!-- Google Fonts: Poppins for enhanced typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS (Animate on Scroll) Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Font Awesome (kept for compatibility) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ assets_url }}/css/app.css">
-    <link rel="stylesheet" href="{{ assets_url }}/css/blog-theme.css">{# Keep blog-specific styles separate #}
+    <!-- Consolidated Custom CSS -->
+    <link rel="stylesheet" href="{{ assets_url }}/css/main.css">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ assets_url }}/images/logo_100x100.svg">
@@ -54,10 +64,13 @@
     {% include 'shared/footer.html.twig' %}
 
     <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom JS -->
-    <script src="{{ assets_url }}/js/app.js"></script>
+    <!-- AOS (Animate on Scroll) JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Consolidated Custom JS -->
+    <script src="{{ assets_url }}/js/main.js"></script>
 
     {% block scripts %}{% endblock %}
 
