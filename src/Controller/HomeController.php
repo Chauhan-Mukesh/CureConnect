@@ -30,7 +30,7 @@ class HomeController extends BaseController
             $this->trans('World-Class Healthcare in India'),
             $this->trans('Experience affordable, high-quality medical treatments with our comprehensive medical tourism services. Connect with top hospitals and specialists across India.'),
             'medical tourism india, healthcare india, cost savings, treatments',
-            $this->app->getConfig()['app']['assets_url'] . '/images/hero-medical-tourism.jpg'
+            '/images/hero-medical-tourism.jpg'  // Temporary fix for assets_url
         );
 
         // Sample statistics data (in production, fetch from database)

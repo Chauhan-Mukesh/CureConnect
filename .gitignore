@@ -16,3 +16,8 @@ phpunit.xml
 phpstan.neon
 rector.php
 
+# Database files
+/database/*.sqlite
+/database/*.sqlite3
+/database/*.db
+

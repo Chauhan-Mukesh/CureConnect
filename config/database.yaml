@@ -1,7 +1,7 @@
 # Database Configuration
 database:
   driver: "sqlite"
-  name: "database/database.sqlite"
+  name: "database/cureconnect.sqlite"
   # Fallback MySQL configuration (if needed)
   host: "localhost"
   port: 3306
