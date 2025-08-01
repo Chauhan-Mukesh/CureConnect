@@ -133,9 +133,16 @@ class Application
 
             foreach ($configFiles as $key => $file) {
                 if (file_exists($file)) {
-                    $this->config[$key] = class_exists(\Symfony\Component\Yaml\Yaml::class)
+                    $parsed = class_exists(\Symfony\Component\Yaml\Yaml::class)
                         ? \Symfony\Component\Yaml\Yaml::parseFile($file)
                         : \CureConnect\Core\SimpleYaml::parseFile($file);
+                    
+                    // Flatten nested structure - use the inner array if it exists
+                    if (isset($parsed[$key]) && is_array($parsed[$key])) {
+                        $this->config[$key] = $parsed[$key];
+                    } else {
+                        $this->config[$key] = $parsed;
+                    }
                 }
             }
 
@@ -201,7 +208,13 @@ class Application
      */
     private function initializeTwig(): void
     {
-        $templatesPath = $this->config['app']['templates_path'] ?? $this->rootPath . '/templates';
+        $templatesPath = $this->config['app']['templates_path'] ?? 'templates';
+        
+        // Make path absolute if it's relative
+        if (!str_starts_with($templatesPath, '/')) {
+            $templatesPath = $this->rootPath . '/' . $templatesPath;
+        }
+        
         if (class_exists(\Twig\Environment::class)) {
             $loader = new \Twig\Loader\FilesystemLoader($templatesPath);
             $this->twig = new \Twig\Environment($loader, [
