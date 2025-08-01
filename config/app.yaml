@@ -7,9 +7,9 @@ app:
   timezone: "Asia/Kolkata"
 
   # URLs and Paths
-  base_url: "http://localhost/CureConnect"
-  assets_url: "http://localhost/CureConnect"
-  uploads_url: "http://localhost/CureConnect/uploads"
+  base_url: "http://localhost:8000"
+  assets_url: "http://localhost:8000"
+  uploads_url: "http://localhost:8000/uploads"
 
   # File Paths
   templates_path: "templates"

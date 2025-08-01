@@ -138,7 +138,7 @@ class SecurityTest extends TestCase
 
     public function testCheckRateLimit(): void
     {
-        $key = 'test_rate_limit';
+        $key = 'test_rate_limit_' . uniqid();
 
         // First attempts should pass
         for ($i = 1; $i <= 5; $i++) {
