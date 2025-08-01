@@ -40,3 +40,35 @@ contact_us:
   path: /contact-us
   controller: CureConnect\Controller\PageController::contact
   methods: [GET, POST]
+
+# Appointment management routes
+appointments:
+  path: /appointments
+  controller: CureConnect\Controller\AppointmentController::index
+  methods: [GET]
+
+appointment_show:
+  path: /appointments/{id}
+  controller: CureConnect\Controller\AppointmentController::show
+  methods: [GET]
+  requirements:
+    id: '\d+'
+
+appointment_create:
+  path: /appointments/create
+  controller: CureConnect\Controller\AppointmentController::create
+  methods: [GET, POST]
+
+appointment_update:
+  path: /appointments/{id}/edit
+  controller: CureConnect\Controller\AppointmentController::update
+  methods: [GET, POST]
+  requirements:
+    id: '\d+'
+
+appointment_delete:
+  path: /appointments/{id}/delete
+  controller: CureConnect\Controller\AppointmentController::delete
+  methods: [POST]
+  requirements:
+    id: '\d+'

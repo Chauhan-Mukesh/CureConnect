@@ -8,12 +8,12 @@ declare(strict_types=1);
  * Handles appointment management including creation, updating, deletion,
  * and viewing of medical appointments.
  *
- * @package CureConnect\Controllers
+ * @package CureConnect\Controller
  * @author  CureConnect Team
  * @since   1.0.0
  */
 
-namespace CureConnect\Controllers;
+namespace CureConnect\Controller;
 
 use CureConnect\Core\Request;
 use CureConnect\Core\Security;
