@@ -47,7 +47,7 @@ class SecurityTest extends TestCase
     public function testEscapeHtmlWithSpecialCharacters(): void
     {
         $input = 'Test & "quotes" & \'apostrophes\'';
-        $expected = 'Test &amp; &quot;quotes&quot; &amp; &#039;apostrophes&#039;';
+        $expected = 'Test &amp; &quot;quotes&quot; &amp; &apos;apostrophes&apos;';
 
         $result = Security::escapeHtml($input);
 

@@ -44,13 +44,21 @@ class Article
      */
     public function create(array $data)
     {
+        // Validate required fields
+        if (empty($data['title'])) {
+            throw new \InvalidArgumentException('Title is required');
+        }
+        if (empty($data['content'])) {
+            throw new \InvalidArgumentException('Content is required');
+        }
+
         try {
             $sql = "INSERT INTO articles (
                 title, slug, content, language, meta_description, 
                 tags, category, author_name, status, created_at
             ) VALUES (
                 :title, :slug, :content, :language, :meta_description,
-                :tags, :category, :author_name, :status, NOW()
+                :tags, :category, :author_name, :status, CURRENT_TIMESTAMP
             )";
 
             $stmt = $this->db->prepare($sql);
@@ -70,11 +78,36 @@ class Article
                 'status' => $data['status'] ?? 'draft'
             ]);
 
-            return $result ? $this->db->lastInsertId() : false;
+            return $result ? (int) $this->db->lastInsertId() : false;
         } catch (PDOException $e) {
             error_log("Article creation failed: " . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Get article by ID (Alias for getById for test compatibility)
+     *
+     * @param int $id Article ID
+     * @return array|null Article data or null if not found
+     */
+    public function findById(int $id): ?array
+    {
+        $result = $this->getById($id);
+        return $result === false ? null : $result;
+    }
+
+    /**
+     * Get article by slug (Alias for getBySlug for test compatibility)
+     *
+     * @param string $slug Article slug
+     * @param string $language Language code
+     * @return array|null Article data or null if not found
+     */
+    public function findBySlug(string $slug, string $language = 'en'): ?array
+    {
+        $result = $this->getBySlug($slug, $language);
+        return $result === false ? null : $result;
     }
 
     /**
@@ -314,7 +347,7 @@ class Article
                 return false;
             }
 
-            $fields[] = "updated_at = NOW()";
+            $fields[] = "updated_at = CURRENT_TIMESTAMP";
             $sql = "UPDATE articles SET " . implode(', ', $fields) . " WHERE id = :id";
 
             $stmt = $this->db->prepare($sql);

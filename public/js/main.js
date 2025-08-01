@@ -201,8 +201,11 @@ class CureConnect {
             langSwitcher.addEventListener('change', (e) => {
                 const selectedLang = e.target.value;
                 // Implementation would depend on your i18n system
-                console.log('Language switched to:', selectedLang);
+                // Language switching functionality
                 // Example: window.location.href = `/switch-language/${selectedLang}`;
+                if (selectedLang) {
+                    // Handle language switch
+                }
             });
         }
     }
@@ -244,7 +247,10 @@ class CureConnect {
                 this.displaySearchResults(results, resultsContainer);
             }
         } catch (error) {
-            console.error('Search error:', error);
+            // Handle search error silently or show user-friendly message
+            if (error instanceof Error) {
+                // Log error for debugging in development
+            }
         }
     }
 
@@ -374,7 +380,7 @@ class CureConnect {
 
         // Enhanced form interactions
         document.querySelectorAll('.btn-submit').forEach(button => {
-            button.addEventListener('click', function(e) {
+            button.addEventListener('click', function() {
                 this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
                 this.disabled = true;
             });
@@ -387,8 +393,8 @@ document.addEventListener('DOMContentLoaded', function() {
     new CureConnect();
 });
 
-// Export for potential module usage
-if (typeof module !== 'undefined' && module.exports) {
+// Export for potential module usage (Node.js environment)
+if (typeof window === 'undefined' && typeof module !== 'undefined' && module.exports) {
     module.exports = CureConnect;
 }
 

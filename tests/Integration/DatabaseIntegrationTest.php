@@ -12,17 +12,9 @@ class DatabaseIntegrationTest extends TestCase
 
     protected function setUp(): void
     {
-        // Set environment for testing
-        $_ENV['APP_ENV'] = 'testing';
-        $_ENV['DB_DRIVER'] = 'sqlite';
-        $_ENV['DB_NAME'] = ':memory:';
-        
-        $this->app = Application::boot(__DIR__ . '/../../');
+        // Use createTestApplication from bootstrap which sets up fresh database
+        $this->app = createTestApplication();
         $this->database = $this->app->getDatabase();
-        
-        // Load test schema
-        $schema = file_get_contents(__DIR__ . '/../../database/schema-sqlite.sql');
-        $this->database->exec($schema);
     }
 
     public function testDatabaseConnection(): void

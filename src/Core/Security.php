@@ -90,7 +90,7 @@ class Security
     public static function validatePhone(string $phone): bool
     {
         $phone = preg_replace('/[^0-9+\-\s\(\)]/', '', $phone);
-        return preg_match('/^[\+]?[0-9\-\s\(\)]{7,20}$/', $phone);
+        return (bool) preg_match('/^[\+]?[0-9\-\s\(\)]{7,20}$/', $phone);
     }
 
     /**

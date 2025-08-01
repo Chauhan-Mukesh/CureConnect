@@ -90,11 +90,11 @@ class TranslationServiceTest extends TestCase
     public function testFormatCurrency(): void
     {
         $result = TranslationService::formatCurrency(1234.56, 'INR', 'en');
-        $this->assertStringContains('₹', $result);
-        $this->assertStringContains('1,234.56', $result);
+        $this->assertStringContainsString('₹', $result);
+        $this->assertStringContainsString('1,234.56', $result);
 
         $resultUsd = TranslationService::formatCurrency(1234.56, 'USD', 'en');
-        $this->assertStringContains('$', $resultUsd);
+        $this->assertStringContainsString('$', $resultUsd);
     }
 
     public function testFormatDate(): void
