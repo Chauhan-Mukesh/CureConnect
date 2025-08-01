@@ -116,6 +116,16 @@ class SimpleResponse
         $this->statusCode = $statusCode;
         return $this;
     }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
 }
 
 /**

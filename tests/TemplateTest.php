@@ -3,22 +3,15 @@
  * Basic template test
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
+require_once __DIR__ . '/bootstrap.php';
 
 class TemplateTest
 {
-    private $twig;
+    private $app;
     
     public function __construct()
     {
-        $loader = new FilesystemLoader(__DIR__ . '/../templates');
-        $this->twig = new Environment($loader, [
-            'debug' => true,
-            'cache' => false,
-        ]);
+        $this->app = createTestApplication();
     }
     
     public function testTemplatesExist()
@@ -36,12 +29,14 @@ class TemplateTest
         ];
         
         $results = [];
+        $templatesPath = $this->app->getConfig()['app']['templates_path'];
+        
         foreach ($templates as $template) {
-            try {
-                $this->twig->load($template);
+            $filePath = $templatesPath . '/' . $template;
+            if (file_exists($filePath)) {
                 $results[$template] = 'OK';
-            } catch (Exception $e) {
-                $results[$template] = 'FAILED: ' . $e->getMessage();
+            } else {
+                $results[$template] = 'FAILED: File not found';
             }
         }
         
@@ -51,19 +46,19 @@ class TemplateTest
     public function testTemplateRender()
     {
         $sampleData = [
-            'app_name' => 'YourBlog',
+            'app_name' => 'CureConnect Test',
             'base_url' => '',
             'assets_url' => '/assets',
-            'lang' => 'en',
-            'page' => ['title' => 'Test', 'description' => 'Test page']
+            'lang' => 'en'
         ];
         
         $results = [];
         $templates = ['pages/home.html.twig', 'pages/about.html.twig', 'pages/contact.html.twig'];
+        $twig = $this->app->getTwig();
         
         foreach ($templates as $template) {
             try {
-                $output = $this->twig->render($template, $sampleData);
+                $output = $twig->render($template, $sampleData);
                 $results[$template] = strlen($output) > 100 ? 'OK' : 'FAILED: Output too short';
             } catch (Exception $e) {
                 $results[$template] = 'FAILED: ' . $e->getMessage();

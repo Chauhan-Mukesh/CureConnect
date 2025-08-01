@@ -193,6 +193,37 @@ class PageController extends BaseController
     }
 
     /**
+     * Display article page
+     *
+     * @param string $slug Article slug
+     * @return Response
+     */
+    public function article(string $slug = 'welcome'): Response
+    {
+        $metaTags = $this->generateMetaTags(
+            $this->trans('Medical Tourism Articles - ' . ucwords(str_replace('-', ' ', $slug))),
+            $this->trans('Learn about medical tourism, healthcare in India, and treatment options.'),
+            'medical tourism articles, healthcare india, treatment information'
+        );
+
+        // Sample article data (in production, fetch from database by slug)
+        $article = [
+            'title' => $this->trans('Welcome to CureConnect Medical Tourism'),
+            'slug' => $slug,
+            'content' => $this->trans('Discover world-class healthcare solutions in India with our comprehensive medical tourism services.'),
+            'author' => 'CureConnect Team',
+            'date' => date('Y-m-d'),
+            'image' => '/assets/images/article-default.jpg'
+        ];
+
+        return $this->render('pages/article.html.twig', [
+            'meta' => $metaTags,
+            'body_class' => 'article-page',
+            'article' => $article
+        ]);
+    }
+
+    /**
      * Handle contact form submission
      *
      * @return array Result with message and type

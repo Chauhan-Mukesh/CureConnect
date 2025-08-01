@@ -1,47 +1,53 @@
-# CureConnect Blog Platform
+# CureConnect Medical Tourism Portal
 
-A comprehensive blog platform built with vanilla PHP and Twig templating, featuring modern design and responsive layouts.
+A comprehensive medical tourism platform built with Symfony components and Twig templating, connecting international patients with India's world-class healthcare providers.
 
 ## Project Overview
 
-CureConnect has been transformed into a modern blog platform with the following features:
+CureConnect is a modern medical tourism portal with the following features:
 
-- **Modern Blog Design**: Clean, responsive layout optimized for content
+- **Medical Tourism Focus**: Specialized platform for healthcare in India
 - **Twig Templating**: Professional templating system with component separation
-- **Interactive Features**: Dark/light mode toggle, reading progress, animations
-- **Content Management**: Article pages, gallery, categories, and contact forms
-- **SEO Optimized**: Structured data, meta tags, and clean URLs
+- **Interactive Features**: Dark/light mode toggle, smooth animations, enhanced UX
+- **Content Management**: Treatment information, hospital gallery, government schemes, and contact forms
+- **SEO Optimized**: Structured data, meta tags, and clean URLs for medical tourism keywords
 
 ## Features
+
+### 🏥 Medical Tourism Features
+- Treatment cost comparisons between India and other countries
+- Hospital and facility galleries with detailed information
+- Government schemes and e-Medical visa information
+- Statistical dashboards for medical tourism data
+- Consultation request forms and contact management
 
 ### 🎨 Design & UX
 - Responsive Bootstrap 5 design
 - Dark/light theme switching with smooth transitions
-- Smooth scroll animations (AOS library)
-- Interactive hover effects and animations
+- Smooth scroll animations and hover effects
 - Mobile-first responsive design
-- Reading progress indicator
+- Medical-themed color scheme and branding
 
 ### 📝 Content Features
-- Article templates with rich content support
-- Image gallery with lightbox functionality
-- Category browsing and organization
-- Contact forms with validation
-- About page with team information
-- Newsletter subscription
+- Treatment information pages with cost breakdowns
+- Medical facility gallery with categorization
+- Government schemes and visa process guides
+- Contact forms with CSRF protection
+- Article/blog system for medical tourism news
 
 ### 🛠 Technical Features
-- **Backend**: Vanilla PHP 8.0+ with Twig templating
-- **Frontend**: Bootstrap 5, Custom CSS/JS
-- **Security**: CSRF protection and input validation
-- **Performance**: Optimized assets and lazy loading
-- **Code Quality**: PSR-12 standards and organized structure
+- **Backend**: Symfony Components (HTTP Foundation, Routing, Twig) with PHP 8.0+
+- **Frontend**: Bootstrap 5, Enhanced CSS/JS with theme support
+- **Database**: SQLite for development, MySQL for production
+- **Security**: CSRF protection, input validation, and secure routing
+- **Performance**: Optimized assets, lazy loading, and caching support
+- **Code Quality**: PSR-12 standards and organized MVC structure
 
 ## Installation
 
 ### Prerequisites
-- PHP 8.0+
-- Composer
+- PHP 8.0+ with extensions: PDO, JSON, MBString
+- Composer (optional - fallback autoloader included)
 - Web server (Apache/Nginx) with mod_rewrite
 
 ### Setup Steps
@@ -52,23 +58,60 @@ CureConnect has been transformed into a modern blog platform with the following 
    cd CureConnect
    ```
 
-2. **Install Dependencies**
+2. **Install Dependencies** (Optional - fallback autoloader available)
    ```bash
-   composer install
+   # If composer is available
+   composer install --no-dev
+   
+   # OR use the included simple autoloader (no external dependencies required)
+   # The application will automatically fall back to the simple autoloader
    ```
 
 3. **Configure Environment**
    ```bash
    cp .env.example .env
-   # Edit .env with your configuration
+   # Edit .env with your configuration:
+   # - Set APP_ENV=development for development
+   # - Configure database settings (SQLite by default)
+   # - Set security keys for production
    ```
 
-4. **Start Development Server**
+4. **Set up Database** (SQLite - automatic)
+   ```bash
+   # The application will automatically create the SQLite database
+   # Database file: database/database.sqlite
+   
+   # For MySQL (production), update database.yaml and .env
+   ```
+
+5. **Start Development Server**
    ```bash
    composer dev-server
    # or
    php -S localhost:8000 -t public/
    ```
+
+6. **Verify Installation**
+   ```bash
+   # Run tests to verify everything is working
+   php tests/TemplateTest.php
+   
+   # Compare templates (if static files exist)
+   php scripts/compare-templates.php
+   ```
+
+## Available Routes
+
+The medical tourism portal includes the following routes:
+
+| Route | Controller | Purpose |
+|-------|------------|---------|
+| `/` | HomeController::index | Homepage with treatment overview and statistics |
+| `/about` | PageController::about | About CureConnect and our mission |
+| `/contact` | PageController::contact | Contact form and consultation requests |
+| `/gallery` | PageController::gallery | Medical facilities and hospital galleries |
+| `/government-schemes` | PageController::governmentSchemes | Government initiatives and e-Medical visa info |
+| `/article/{slug}` | PageController::article | Medical tourism articles and news |
 
 ## Project Structure
 

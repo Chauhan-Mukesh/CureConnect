@@ -1,5 +1,5 @@
 /**
- * CureConnect Medical Tourism Portal - Animation Styles
+ * CureConnect Medical Tourism Portal - Enhanced Animation Styles
  */
 
 /* Fade In Animations */
@@ -22,6 +22,17 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 
