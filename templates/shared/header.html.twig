@@ -1,34 +1,19 @@
 <header class="header-main">
-    <!-- Top Bar -->
-    <div class="top-bar bg-primary text-white py-2">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <div class="contact-info">
-                        <i class="fas fa-phone me-2"></i>
-                        <span>+91-1800-123-4567</span>
-                        <i class="fas fa-envelope ms-3 me-2"></i>
-                        <span>info@cureconnect.in</span>
-                    </div>
-                </div>
-                <div class="col-md-6 text-end">
-                    <div class="social-links">
-                        <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <!-- Logo -->
             <a class="navbar-brand" href="{{ base_url }}">
-                <img src="{{ assets_url }}/images/logo.svg" alt="{{ app_name }}" height="50">
+                <svg viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:var(--gradient-start);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:var(--gradient-end);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="url(#logoGradient)" d="M18.4,42.2c-4.9,0-9-1.7-12.3-5.2C2.8,33.5,1.1,29,1.1,23.9c0-5,1.7-9.5,5.1-12.9c3.4-3.4,7.6-5.1,12.6-5.1c4.8,0,8.8,1.6,12.1,4.7c2.2,2.1,3.7,4.6,4.7,7.4l-7.3,3.1c-0.6-1.5-1.5-2.8-2.7-3.8c-1.2-1-2.7-1.5-4.5-1.5c-2.9,0-5.3,1-7.1,3c-1.8,2-2.7,4.5-2.7,7.7c0,3.1,0.9,5.7,2.8,7.8c1.9,2.1,4.3,3.2,7.2,3.2c1.9,0,3.5-0.5,4.8-1.6c1.3-1.1,2.2-2.5,2.6-4.3l7.3,2.7c-1,3.1-2.6,5.7-4.9,7.8C27.3,40.6,23.2,42.2,18.4,42.2z"/>
+                    <text x="50" y="35" font-family="Poppins, sans-serif" font-size="30" font-weight="600" fill="var(--bs-body-color)">{{ app_name|default('YourBlog') }}</text>
+                </svg>
             </a>
 
             <!-- Mobile Toggle -->
@@ -44,19 +29,18 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            Medical Tourism
+                            Categories
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ base_url }}/treatments">Treatments</a></li>
-                            <li><a class="dropdown-item" href="{{ base_url }}/hospitals">Hospitals</a></li>
-                            <li><a class="dropdown-item" href="{{ base_url }}/doctors">Doctors</a></li>
+                            <li><a class="dropdown-item" href="{{ base_url }}/category/tech">Tech</a></li>
+                            <li><a class="dropdown-item" href="{{ base_url }}/category/lifestyle">Lifestyle</a></li>
+                            <li><a class="dropdown-item" href="{{ base_url }}/category/creative">Creative</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ base_url }}/government-schemes">All Categories</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request.pathInfo == '/gallery' ? 'active' : '' }}" href="{{ base_url }}/gallery">Gallery</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request.pathInfo == '/government-schemes' ? 'active' : '' }}" href="{{ base_url }}/government-schemes">Government Schemes</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request.pathInfo == '/about' ? 'active' : '' }}" href="{{ base_url }}/about">About</a>
@@ -68,25 +52,24 @@
 
                 <!-- Right Side Menu -->
                 <ul class="navbar-nav">
+                    <!-- Search -->
+                    <li class="nav-item">
+                        <form class="d-flex" role="search" id="search-form">
+                            <input class="form-control form-control-sm" type="search" placeholder="Search..." aria-label="Search" id="search-input">
+                        </form>
+                    </li>
+
                     <!-- Language Selector -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
                             <i class="fas fa-globe me-1"></i>
-                            {{ lang|upper }}
+                            {{ lang|upper|default('EN') }}
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="?lang=en">English</a></li>
                             <li><a class="dropdown-item" href="?lang=bn">বাংলা</a></li>
                             <li><a class="dropdown-item" href="?lang=ar">العربية</a></li>
                         </ul>
-                    </li>
-
-                    <!-- Login/Register (placeholder for future implementation) -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ base_url }}/login">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-primary ms-2" href="{{ base_url }}/register">Register</a>
                     </li>
                 </ul>
             </div>
