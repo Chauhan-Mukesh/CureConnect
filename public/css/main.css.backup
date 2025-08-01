@@ -2,21 +2,12 @@
  * CureConnect Medical Tourism Portal - Consolidated CSS
  * Merged from app.css, blog-theme.css, and HTML inline styles
  * Bootstrap 5.3.0+ compatible with medical tourism theme
- * Theme and structure from provided HTML style guides
  */
 
-/* Base & Theme Variables from HTML style guides */
+/* CSS Variables for Theme Consistency */
 :root {
-    --primary-color: #8e44ad;
-    --secondary-color: #3498db;
-    --gradient-start: #8e44ad;
-    --gradient-end: #3498db;
-    --font-family-base: 'Poppins', sans-serif;
-    --transition-speed: 0.3s;
-    --border-radius-lg: 1rem;
-    --border-radius-md: 0.5rem;
-    
-    /* Medical tourism specific colors */
+    --primary-color: #2c5aa0;
+    --secondary-color: #f39c12;
     --success-color: #27ae60;
     --danger-color: #e74c3c;
     --warning-color: #f1c40f;
@@ -30,6 +21,16 @@
     --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
     --border-radius: 0.375rem;
     --font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    /* Enhanced theme variables for modern features */
+    --transition-speed: 0.3s;
+    --border-radius-lg: 1rem;
+    --border-radius-md: 0.5rem;
+    --gradient-start: var(--primary-color);
+    --gradient-end: var(--info-color);
+    
+    /* Typography support for Poppins from HTML themes */
+    --font-family-base: 'Poppins', 'Inter', 'Segoe UI', sans-serif;
 }
 
 /* Light/Dark Theme Support */
@@ -50,7 +51,7 @@
     --bs-tertiary-bg: #161b22;
     --bs-tertiary-color: #8b949e;
     --bs-border-color: #30363d;
-    --primary-color: #a367d1;
+    --primary-color: #4a7bc8;
     --scrollbar-thumb-color: #30363d;
     --scrollbar-thumb-hover-color: #484f58;
     --footer-bg-color: #10151d;
@@ -332,30 +333,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .theme-toggle-icon.animating {
-    transform: rotate(360deg) scale(0.8);
-}
-
-/* View Transition Styles for Theme Toggle */
-::view-transition-old(root),
-::view-transition-new(root) {
-    animation: none;
-    mix-blend-mode: normal;
-}
-
-::view-transition-old(root) { 
-    z-index: 1; 
-}
-
-::view-transition-new(root) { 
-    z-index: 9999; 
-}
-
-[data-bs-theme="dark"]::view-transition-old(root) { 
-    z-index: 9999; 
-}
-
-[data-bs-theme="dark"]::view-transition-new(root) { 
-    z-index: 1; 
+    transform: rotate(180deg);
 }
 
 /* Animation Classes */
