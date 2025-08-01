@@ -152,7 +152,8 @@ class Application
     private function initializeDatabase(): void
     {
         if ($this->database === null) {
-            $dbConfig = $this->config['database'] ?? [];
+            // Fix nested config structure - the YAML has database.database
+            $dbConfig = $this->config['database']['database'] ?? $this->config['database'] ?? [];
             $driver = $dbConfig['driver'] ?? 'mysql';
             
             if ($driver === 'sqlite') {
@@ -201,12 +202,20 @@ class Application
      */
     private function initializeTwig(): void
     {
-        $templatesPath = $this->config['app']['templates_path'] ?? $this->rootPath . '/templates';
+        // Fix nested config structure
+        $appConfig = $this->config['app']['app'] ?? $this->config['app'] ?? [];
+        $templatesPath = $appConfig['templates_path'] ?? 'templates';
+        
+        // Make templates path absolute if it's relative
+        if (!str_starts_with($templatesPath, '/')) {
+            $templatesPath = $this->rootPath . '/' . $templatesPath;
+        }
+        
         if (class_exists(\Twig\Environment::class)) {
             $loader = new \Twig\Loader\FilesystemLoader($templatesPath);
             $this->twig = new \Twig\Environment($loader, [
-                'cache' => $this->config['app']['environment'] === 'production' ? $this->config['app']['cache_path'] : false,
-                'debug' => $this->config['app']['debug'] ?? true
+                'cache' => ($appConfig['environment'] ?? 'development') === 'production' ? ($appConfig['cache_path'] ?? false) : false,
+                'debug' => $appConfig['debug'] ?? true
             ]);
         } else {
             // Simple template renderer fallback
@@ -215,9 +224,9 @@ class Application
 
         // Add global variables
         if (method_exists($this->twig, 'addGlobal')) {
-            $this->twig->addGlobal('app_name', $this->config['app']['name'] ?? 'CureConnect');
-            $this->twig->addGlobal('assets_url', $this->config['app']['assets_url'] ?? '');
-            $this->twig->addGlobal('base_url', $this->config['app']['base_url'] ?? '/');
+            $this->twig->addGlobal('app_name', $appConfig['name'] ?? 'CureConnect');
+            $this->twig->addGlobal('assets_url', $appConfig['assets_url'] ?? '');
+            $this->twig->addGlobal('base_url', $appConfig['base_url'] ?? '/');
         }
     }
 
