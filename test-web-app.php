@@ -59,7 +59,7 @@ try {
     // Test template data
     $testData = [
         'app_name' => 'CureConnect Medical Tourism',
-        'assets_url' => '/assets',
+        'assets_url' => '',
         'base_url' => '/',
         'lang' => 'en',
         'meta' => [
@@ -197,7 +197,7 @@ try {
     }
     
     // Check that CSS contains extracted styles
-    $cssFile = __DIR__ . '/assets/css/blog-theme.css';
+    $cssFile = __DIR__ . '/public/css/blog-theme.css';
     if (file_exists($cssFile)) {
         $css = file_get_contents($cssFile);
         $extractedStyles = [

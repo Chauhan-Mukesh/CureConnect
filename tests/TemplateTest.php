@@ -48,7 +48,7 @@ class TemplateTest
         $sampleData = [
             'app_name' => 'CureConnect Test',
             'base_url' => '',
-            'assets_url' => '/assets',
+            'assets_url' => '',
             'lang' => 'en'
         ];
         

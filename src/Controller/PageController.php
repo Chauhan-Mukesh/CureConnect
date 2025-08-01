@@ -102,8 +102,8 @@ class PageController extends BaseController
                 'id' => 1,
                 'title' => $this->trans('Apollo Hospital Chennai - Main Building'),
                 'category' => 'hospitals',
-                'image' => '/assets/images/gallery/apollo-chennai-main.jpg',
-                'thumbnail' => '/assets/images/gallery/thumbs/apollo-chennai-main-thumb.jpg',
+                'image' => $this->app->getConfig()['app']['assets_url'] . '/images/Gemini_Generated_Image_hcdewthcdewthcde.png',
+                'thumbnail' => $this->app->getConfig()['app']['assets_url'] . '/images/logo_250x150.svg',
                 'description' => $this->trans('State-of-the-art medical facility with 500+ beds'),
                 'hospital' => 'Apollo Hospital Chennai'
             ],
@@ -111,8 +111,8 @@ class PageController extends BaseController
                 'id' => 2,
                 'title' => $this->trans('Cardiac Surgery Suite'),
                 'category' => 'treatments',
-                'image' => '/assets/images/gallery/cardiac-surgery-suite.jpg',
-                'thumbnail' => '/assets/images/gallery/thumbs/cardiac-surgery-suite-thumb.jpg',
+                'image' => $this->app->getConfig()['app']['assets_url'] . '/images/Gemini_Generated_Image_hcdewthcdewthcde.png',
+                'thumbnail' => $this->app->getConfig()['app']['assets_url'] . '/images/logo_100x100.svg',
                 'description' => $this->trans('Advanced cardiac surgery operating theater'),
                 'hospital' => 'Fortis Hospital Delhi'
             ]
@@ -213,7 +213,7 @@ class PageController extends BaseController
             'content' => $this->trans('Discover world-class healthcare solutions in India with our comprehensive medical tourism services.'),
             'author' => 'CureConnect Team',
             'date' => date('Y-m-d'),
-            'image' => '/assets/images/article-default.jpg'
+            'image' => $this->app->getConfig()['app']['assets_url'] . '/images/Gemini_Generated_Image_hcdewthcdewthcde.png'
         ];
 
         return $this->render('pages/article.html.twig', [

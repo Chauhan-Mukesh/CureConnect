@@ -117,16 +117,14 @@ The medical tourism portal includes the following routes:
 
 ```
 ./CureConnect
-├── assets/              # Static assets
-│   ├── css/            # Stylesheets
-│   │   ├── theme.css   # Main theme styles
-│   │   ├── components.css
-│   │   ├── animations.css
+├── public/              # Web-accessible directory (document root)
+│   ├── css/            # Consolidated stylesheets
+│   │   ├── app.css     # Main application styles (consolidated)
 │   │   └── blog-theme.css  # Blog-specific styles
-│   ├── js/             # JavaScript files
-│   │   ├── core.js     # Core functionality
-│   │   └── blog-theme.js   # Blog-specific scripts
-│   └── images/         # Static images
+│   ├── js/             # Consolidated JavaScript
+│   │   └── app.js      # Main application scripts (consolidated)
+│   ├── images/         # Static images and logos
+│   └── index.php       # Application entry point
 ├── src/                # PHP application code
 │   ├── Core/          # Core application classes
 │   ├── Controller/    # Page controllers
@@ -147,7 +145,7 @@ The medical tourism portal includes the following routes:
 ├── tests/             # Test files
 ├── lang/              # Internationalization
 ├── config/            # Configuration files
-└── public/            # Web server document root
+└── database/          # Database files and schemas
 ```
 
 ## Technology Stack
@@ -190,16 +188,49 @@ composer quality
 ### Key Features
 
 1. **Template System**: Professional Twig templating with inheritance
-2. **Asset Management**: Organized CSS/JS with blog-specific extensions
+2. **Asset Management**: Consolidated CSS/JS with optimized loading from `/public/` directory
 3. **Interactive UI**: Theme switching, animations, and user feedback
 4. **Content Structure**: Flexible template system for various content types
 5. **Performance**: Optimized loading and responsive design
+
+## Asset Management
+
+### Asset Structure
+All static assets are now properly organized in the web-accessible `public/` directory:
+
+- **CSS**: `/public/css/` - Consolidated stylesheets
+  - `app.css` - Main application styles (combines theme, components, animations)
+  - `blog-theme.css` - Blog-specific styling
+- **JavaScript**: `/public/js/` - Consolidated scripts
+  - `app.js` - Main application functionality (combines core and blog features)
+- **Images**: `/public/images/` - Static images and logos
+
+### Asset Loading
+Assets are served with proper URLs using Twig's `{{ assets_url }}` variable:
+- CSS: `{{ assets_url }}/css/app.css`
+- JS: `{{ assets_url }}/js/app.js`
+- Images: `{{ assets_url }}/images/logo.svg`
+
+### Adding New Assets
+To add new CSS or JavaScript:
+1. **For global styles**: Add to `public/css/app.css`
+2. **For page-specific styles**: Create new file in `public/css/`
+3. **For JavaScript**: Add to `public/js/app.js` or create specific file
+4. **Update templates**: Reference new assets in appropriate Twig templates
+
+### Bootstrap Integration
+- Bootstrap 5.3.0 loaded via CDN for performance
+- Font Awesome 6.4.0 for icons
+- Custom styles complement Bootstrap without conflicts
 
 ## Recent Updates
 
 - ✅ Migrated from static HTML to dynamic Twig templates
 - ✅ Extracted and organized all inline styles and scripts
 - ✅ Implemented blog-focused navigation and features
+- ✅ Relocated all assets from `/assets/` to web-accessible `/public/` directory
+- ✅ Consolidated CSS and JavaScript files for better performance
+- ✅ Updated all asset references to use proper public URLs
 - ✅ Added comprehensive template testing
 - ✅ Optimized asset structure and performance
 - ✅ Enhanced SEO and accessibility features

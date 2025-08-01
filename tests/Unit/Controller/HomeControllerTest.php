@@ -33,7 +33,7 @@ class HomeControllerTest extends TestCase
             'app' => [
                 'name' => 'Test App',
                 'base_url' => 'http://localhost',
-                'assets_url' => 'http://localhost/assets'
+                'assets_url' => 'http://localhost'
             ]
         ]);
 

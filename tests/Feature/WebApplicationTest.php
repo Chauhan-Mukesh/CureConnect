@@ -73,7 +73,7 @@ class WebApplicationTest extends TestCase
             try {
                 $output = $twig->render('base.html.twig', [
                     'app_name' => 'Test CureConnect',
-                    'assets_url' => '/assets',
+                    'assets_url' => '',
                     'lang' => 'en',
                     'meta' => ['title' => 'Test Page']
                 ]);
