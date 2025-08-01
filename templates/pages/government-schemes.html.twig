@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block head %}
+    <!-- AOS (Animate on Scroll) Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Blog Theme CSS -->
+    <link rel="stylesheet" href="{{ assets_url }}/css/blog-theme.css">
+{% endblock %}
+
+{% block main %}
+<main>
+    <!-- Page Header -->
+    <header class="page-header text-center">
+        <div class="container">
+            <h1 class="display-4">{{ page.title|default('Categories') }}</h1>
+            <p class="lead col-lg-8 mx-auto">{{ page.description|default('Explore our content organized by topics and themes.') }}</p>
+        </div>
+    </header>
+
+    <div class="container-xl mt-5 pt-4">
+        <!-- Content Grid -->
+        <section class="my-5">
+            <div class="row g-4">
+                {% set default_categories = [
+                    {
+                        title: 'Technology',
+                        description: 'Latest trends in software development, AI, and digital innovation.',
+                        image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=600&auto=format&fit=crop',
+                        link: '/category/technology',
+                        count: 12,
+                        icon: 'bi-cpu'
+                    },
+                    {
+                        title: 'Lifestyle',
+                        description: 'Tips for better living, productivity, and personal development.',
+                        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=600&auto=format&fit=crop',
+                        link: '/category/lifestyle',
+                        count: 8,
+                        icon: 'bi-heart'
+                    },
+                    {
+                        title: 'Creative Writing',
+                        description: 'Inspiration and techniques for writers and content creators.',
+                        image: 'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?q=80&w=600&auto=format&fit=crop',
+                        link: '/category/creative',
+                        count: 15,
+                        icon: 'bi-pencil'
+                    },
+                    {
+                        title: 'Business',
+                        description: 'Entrepreneurship, marketing strategies, and industry insights.',
+                        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop',
+                        link: '/category/business',
+                        count: 6,
+                        icon: 'bi-briefcase'
+                    },
+                    {
+                        title: 'Design',
+                        description: 'UI/UX design principles, tools, and creative inspiration.',
+                        image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=600&auto=format&fit=crop',
+                        link: '/category/design',
+                        count: 10,
+                        icon: 'bi-palette'
+                    },
+                    {
+                        title: 'Travel',
+                        description: 'Remote work destinations and digital nomad experiences.',
+                        image: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=600&auto=format&fit=crop',
+                        link: '/category/travel',
+                        count: 5,
+                        icon: 'bi-airplane'
+                    }
+                ] %}
+                
+                {% for category in categories|default(default_categories) %}
+                    {% if category.type == 'ad' %}
+                        <!-- Ad Placeholder -->
+                        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                            <div class="adsense-placeholder h-100 scheme-card">
+                                <small>Advertisement</small>
+                            </div>
+                        </div>
+                    {% else %}
+                        <!-- Category Card -->
+                        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                            <div class="scheme-card">
+                                <img src="{{ category.image }}" class="card-img-top" alt="{{ category.title }}">
+                                <div class="scheme-header">
+                                    <div class="d-flex align-items-center">
+                                        <i class="{{ category.icon }} me-2 fs-4"></i>
+                                        <h5 class="mb-0">{{ category.title }}</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    <p class="card-text text-muted">{{ category.description }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">{{ category.count }} articles</small>
+                                        <a href="{{ category.link }}" class="btn btn-gradient">
+                                            Explore <i class="bi bi-arrow-right ms-1"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if loop.index == 3 %}
+                        <!-- Ad Section after 3rd item -->
+                        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                            <div class="adsense-placeholder h-100 scheme-card">
+                                <small>Advertisement</small>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Popular Tags -->
+        <section class="my-5 py-5 bg-body-tertiary rounded-4">
+            <div class="container">
+                <div class="text-center mb-4">
+                    <h2 class="display-6" data-aos="fade-up">Popular Tags</h2>
+                    <p class="lead" data-aos="fade-up" data-aos-delay="100">Discover content by popular topics</p>
+                </div>
+                <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+                    {% set default_tags = [
+                        'JavaScript', 'React', 'Node.js', 'PHP', 'Python', 'CSS',
+                        'UI/UX', 'Web Development', 'API', 'Database', 'DevOps',
+                        'Machine Learning', 'Productivity', 'Remote Work', 'Freelancing'
+                    ] %}
+                    
+                    {% for tag in tags|default(default_tags) %}
+                        <span class="badge bg-primary me-2 mb-2 fs-6 py-2 px-3">
+                            <a href="/tag/{{ tag|lower|replace({' ': '-'}) }}" class="text-white text-decoration-none">
+                                #{{ tag }}
+                            </a>
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Signup -->
+        <section class="my-5 py-5" data-aos="zoom-in">
+            <div class="hero-banner text-center">
+                <h2 class="display-5">Stay Updated</h2>
+                <p class="lead my-3">Get the latest articles and insights delivered to your inbox</p>
+                <form id="newsletter-form" class="row g-3 justify-content-center">
+                    <div class="col-auto">
+                        <input type="email" class="form-control form-control-lg" placeholder="Enter your email" required>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-gradient btn-lg">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Blog Theme JavaScript -->
+    <script src="{{ assets_url }}/js/blog-theme.js"></script>
+{% endblock %}

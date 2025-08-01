@@ -1,51 +1,55 @@
-# CureConnect Medical Tourism Portal
+# CureConnect Blog Platform
 
-A comprehensive medical tourism platform for India, connecting international patients with world-class healthcare providers.
+A comprehensive blog platform built with vanilla PHP and Twig templating, featuring modern design and responsive layouts.
 
 ## Project Overview
 
-CureConnect is a professional medical tourism portal built with vanilla PHP that helps international patients discover affordable, high-quality medical treatments in India. The platform includes:
+CureConnect has been transformed into a modern blog platform with the following features:
 
-- **Market Focus**: Indian medical tourism market valued at USD 8.19 billion (2024)
-- **Target Audience**: International patients from 156+ countries with medical visa eligibility
-- **Cost Advantage**: 30-70% savings compared to Western countries
+- **Modern Blog Design**: Clean, responsive layout optimized for content
+- **Twig Templating**: Professional templating system with component separation
+- **Interactive Features**: Dark/light mode toggle, reading progress, animations
+- **Content Management**: Article pages, gallery, categories, and contact forms
+- **SEO Optimized**: Structured data, meta tags, and clean URLs
 
 ## Features
 
-### 🏥 Core Functionality
-- Hospital listings with accreditation details
-- Doctor profiles and specializations
-- Treatment information with cost comparisons
-- Medical visa guidance
-- Multi-language support (English, Bengali, Arabic)
-
-### 🎨 Technical Features
+### 🎨 Design & UX
 - Responsive Bootstrap 5 design
-- SEO-optimized with structured data
-- CSRF protection and security headers
-- Database-driven content management
-- Professional animations and interactions
-
-### 📱 User Experience
-- Smooth scroll animations
-- Interactive search functionality
+- Dark/light theme switching with smooth transitions
+- Smooth scroll animations (AOS library)
+- Interactive hover effects and animations
 - Mobile-first responsive design
-- Accessibility compliance
-- Fast loading with optimized assets
+- Reading progress indicator
+
+### 📝 Content Features
+- Article templates with rich content support
+- Image gallery with lightbox functionality
+- Category browsing and organization
+- Contact forms with validation
+- About page with team information
+- Newsletter subscription
+
+### 🛠 Technical Features
+- **Backend**: Vanilla PHP 8.0+ with Twig templating
+- **Frontend**: Bootstrap 5, Custom CSS/JS
+- **Security**: CSRF protection and input validation
+- **Performance**: Optimized assets and lazy loading
+- **Code Quality**: PSR-12 standards and organized structure
 
 ## Installation
 
 ### Prerequisites
 - PHP 8.0+
-- MySQL 8.x
-- Apache/Nginx with mod_rewrite
 - Composer
+- Web server (Apache/Nginx) with mod_rewrite
 
 ### Setup Steps
 
-1. **Clone/Download** the project to your web server directory
-   ```
-   D:\xampp\htdocs\CureConnect (current location)
+1. **Clone/Download** the project
+   ```bash
+   git clone <repository-url>
+   cd CureConnect
    ```
 
 2. **Install Dependencies**
@@ -54,76 +58,121 @@ CureConnect is a professional medical tourism portal built with vanilla PHP that
    ```
 
 3. **Configure Environment**
-   - Copy `.env.example` to `.env` (if needed)
-   - Update database credentials in `.env`
-   - Set up other API keys as needed
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
 
-4. **Database Setup**
-   - Import `database/schema.sql` into MySQL
-   - Default admin: admin@cureconnect.in / password
-
-5. **Web Server Configuration**
-   - Ensure mod_rewrite is enabled
-   - Point document root to project folder
-   - The `.htaccess` file handles URL rewriting
+4. **Start Development Server**
+   ```bash
+   composer dev-server
+   # or
+   php -S localhost:8000 -t public/
+   ```
 
 ## Project Structure
 
 ```
-/CureConnect
-├── assets/              # CSS, JS, Images
-│   ├── css/            # Theme, Components, Animations
-│   ├── js/             # Core functionality
+./CureConnect
+├── assets/              # Static assets
+│   ├── css/            # Stylesheets
+│   │   ├── theme.css   # Main theme styles
+│   │   ├── components.css
+│   │   ├── animations.css
+│   │   └── blog-theme.css  # Blog-specific styles
+│   ├── js/             # JavaScript files
+│   │   ├── core.js     # Core functionality
+│   │   └── blog-theme.js   # Blog-specific scripts
 │   └── images/         # Static images
-├── includes/           # Core PHP functions
-│   ├── functions.php   # Utility functions
-│   ├── database.php    # Database operations
-│   └── auth.php        # Authentication system
-├── templates/          # HTML templates
-│   ├── shared/         # Header, Footer, Head
-│   └── pages/          # Page-specific templates
+├── src/                # PHP application code
+│   ├── Core/          # Core application classes
+│   ├── Controller/    # Page controllers
+│   ├── Models/        # Data models
+│   └── Services/      # Business logic services
+├── templates/          # Twig templates
+│   ├── base.html.twig # Base template
+│   ├── pages/         # Page templates
+│   │   ├── home.html.twig
+│   │   ├── about.html.twig
+│   │   ├── contact.html.twig
+│   │   ├── gallery.html.twig
+│   │   ├── article.html.twig
+│   │   └── government-schemes.html.twig
+│   └── shared/        # Shared components
+│       ├── header.html.twig
+│       └── footer.html.twig
+├── tests/             # Test files
 ├── lang/              # Internationalization
-├── database/          # Schema and migrations
-├── admin/             # Admin dashboard
-├── articles/          # SEO-friendly articles
-└── public/            # Public assets
+├── config/            # Configuration files
+└── public/            # Web server document root
 ```
 
 ## Technology Stack
 
-- **Backend**: Vanilla PHP 8.x with PDO
-- **Frontend**: Bootstrap 5, Vanilla JavaScript
-- **Database**: MySQL 8.x with utf8mb4
-- **Security**: CSRF protection, prepared statements
-- **SEO**: Structured data, meta tags, clean URLs
+- **Backend**: Vanilla PHP 8.x with Twig templating
+- **Frontend**: Bootstrap 5, Modern CSS, Vanilla JavaScript
+- **Dependencies**: Managed with Composer
+- **Testing**: Custom template tests
+- **Code Quality**: PSR-12 compliant
 
 ## Current Status
 
-✅ **Completed Setup:**
-- Folder structure created
-- Core PHP files (config, functions, database, auth)
-- Professional CSS with animations
-- JavaScript functionality (search, forms, animations)
-- Database schema with all necessary tables
-- Main homepage with hero section and features
-- Language support framework
-- SEO-friendly URL structure
-- Security configurations
+✅ **Completed Features:**
+- ✅ Complete Twig template system
+- ✅ Responsive blog design with dark/light themes
+- ✅ Interactive components and animations
+- ✅ SEO-optimized structure
+- ✅ Clean CSS/JS architecture
+- ✅ Template testing framework
+- ✅ Asset organization and optimization
 
-## Next Steps
+✅ **Template Conversion:**
+- ✅ Extracted all inline CSS to `blog-theme.css`
+- ✅ Extracted all inline JavaScript to `blog-theme.js`
+- ✅ Converted all static HTML to Twig templates
+- ✅ Updated header and footer for blog functionality
+- ✅ Removed static HTML files after verification
 
-To make the project fully operational:
+## Development
 
-1. **Create additional pages**: About, Contact, Treatments listing
-2. **Set up database**: Import the schema and add sample data
-3. **Configure web server**: Set up virtual host if needed
-4. **Add content**: Upload hospital/doctor/treatment data
-5. **Test functionality**: Forms, search, navigation
+### Running Tests
+```bash
+# Run template tests
+php tests/TemplateTest.php
 
-## Access the Project
+# Run code quality checks (when dependencies installed)
+composer quality
+```
 
-Once XAMPP is running, access the project at:
-- Local: `http://localhost/CureConnect`
-- With virtual host: `http://cureconnect.local` (if configured)
+### Key Features
 
-The project is designed to be production-ready with proper security, SEO optimization, and professional UI/UX for the medical tourism industry.
+1. **Template System**: Professional Twig templating with inheritance
+2. **Asset Management**: Organized CSS/JS with blog-specific extensions
+3. **Interactive UI**: Theme switching, animations, and user feedback
+4. **Content Structure**: Flexible template system for various content types
+5. **Performance**: Optimized loading and responsive design
+
+## Recent Updates
+
+- ✅ Migrated from static HTML to dynamic Twig templates
+- ✅ Extracted and organized all inline styles and scripts
+- ✅ Implemented blog-focused navigation and features
+- ✅ Added comprehensive template testing
+- ✅ Optimized asset structure and performance
+- ✅ Enhanced SEO and accessibility features
+
+## Usage
+
+The platform is ready for content management with:
+- Article creation and management
+- Gallery image organization
+- Category-based content browsing
+- Contact form handling
+- Newsletter subscription
+- Multi-language support framework
+
+Visit `http://localhost:8000` to access the platform after setup.
+
+---
+
+**Note**: This platform has been successfully converted from a medical tourism site to a modern blog platform with clean, maintainable code and professional templating architecture.
