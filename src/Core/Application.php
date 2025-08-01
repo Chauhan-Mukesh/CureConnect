@@ -13,20 +13,7 @@ declare(strict_types=1);
 namespace CureConnect\Core;
 
 use CureConnect\Services\TranslationService;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Router;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Yaml\Yaml;
 use PDO;
-use Dotenv\Dotenv;
-use SensitiveParameter;
 
 class Application
 {
@@ -36,7 +23,7 @@ class Application
     private ?object $twig = null;
     private ?TranslationService $translator = null;
     private ?object $request = null;
-    private ?RouteCollection $routes = null;
+    private ?array $routes = null;
     private string $rootPath;
 
     /**
@@ -47,8 +34,14 @@ class Application
         $this->rootPath = $rootPath;
 
         // Load fallback classes if composer is not used
-        if (!class_exists(Request::class)) {
+        if (!class_exists(\Symfony\Component\HttpFoundation\Request::class)) {
             require_once $this->rootPath . '/src/Core/Fallbacks.php';
+            // Create aliases for fallback classes
+            if (!class_exists(\Symfony\Component\HttpFoundation\Request::class)) {
+                class_alias(\CureConnect\Core\SimpleRequest::class, 'Symfony\Component\HttpFoundation\Request');
+                class_alias(\CureConnect\Core\SimpleResponse::class, 'Symfony\Component\HttpFoundation\Response');
+                class_alias(\CureConnect\Core\SimpleYaml::class, 'Symfony\Component\Yaml\Yaml');
+            }
         }
 
         $this->loadConfiguration($this->rootPath . '/config');
@@ -89,7 +82,11 @@ class Application
      */
     private function initializeServices(): void
     {
-        $this->request = Request::createFromGlobals();
+        if (class_exists(\Symfony\Component\HttpFoundation\Request::class)) {
+            $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        } else {
+            $this->request = new \CureConnect\Core\SimpleRequest();
+        }
         $this->initializeDatabase();
         $this->initializeTwig();
         $this->initializeTranslator();
@@ -105,23 +102,47 @@ class Application
     private function loadConfiguration(string $configPath): void
     {
         $this->config = [];
-        $configFiles = [
-            'app' => $configPath . '/app.yaml',
-            'database' => $configPath . '/database.yaml',
-            'services' => $configPath . '/services.yaml'
-        ];
+        
+        // Check if we're in testing mode
+        $isTestMode = ($_ENV['APP_ENV'] ?? '') === 'testing';
+        
+        if ($isTestMode) {
+            // Use test configuration
+            $this->config = [
+                'app' => [
+                    'name' => 'CureConnect Test',
+                    'environment' => 'testing',
+                    'debug' => true,
+                    'base_url' => 'http://localhost',
+                    'assets_url' => 'http://localhost/assets',
+                    'templates_path' => 'templates'
+                ],
+                'database' => [
+                    'driver' => 'sqlite',
+                    'name' => ':memory:'
+                ],
+                'services' => []
+            ];
+        } else {
+            // Normal configuration loading
+            $configFiles = [
+                'app' => $configPath . '/app.yaml',
+                'database' => $configPath . '/database.yaml',
+                'services' => $configPath . '/services.yaml'
+            ];
 
-        foreach ($configFiles as $key => $file) {
-            if (file_exists($file)) {
-                $this->config[$key] = class_exists(Yaml::class)
-                    ? Yaml::parseFile($file)
-                    : SimpleYaml::parseFile($file);
+            foreach ($configFiles as $key => $file) {
+                if (file_exists($file)) {
+                    $this->config[$key] = class_exists(\Symfony\Component\Yaml\Yaml::class)
+                        ? \Symfony\Component\Yaml\Yaml::parseFile($file)
+                        : \CureConnect\Core\SimpleYaml::parseFile($file);
+                }
             }
-        }
 
-        // Set default config if files don't exist
-        if (empty($this->config)) {
-            $this->config = $this->getDefaultConfig();
+            // Set default config if files don't exist
+            if (empty($this->config)) {
+                $this->config = $this->getDefaultConfig();
+            }
         }
     }
 
@@ -132,23 +153,46 @@ class Application
     {
         if ($this->database === null) {
             $dbConfig = $this->config['database'] ?? [];
-            $dsn = sprintf(
-                'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
-                $dbConfig['host'] ?? 'localhost',
-                $dbConfig['port'] ?? 3306,
-                $dbConfig['name'] ?? 'cureconnect_db'
-            );
-
-            $this->database = new PDO(
-                $dsn,
-                $dbConfig['username'] ?? 'root',
-                $dbConfig['password'] ?? '',
-                [
+            $driver = $dbConfig['driver'] ?? 'mysql';
+            
+            if ($driver === 'sqlite') {
+                // SQLite configuration
+                $database = $dbConfig['name'] ?? ':memory:';
+                if ($database !== ':memory:' && !str_starts_with($database, '/')) {
+                    // Relative path, make it absolute
+                    $database = $this->rootPath . '/' . $database;
+                }
+                $dsn = 'sqlite:' . $database;
+                
+                $this->database = new PDO($dsn, null, null, [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                     PDO::ATTR_EMULATE_PREPARES => false
-                ]
-            );
+                ]);
+                
+                // Enable foreign key constraints for SQLite
+                $this->database->exec('PRAGMA foreign_keys = ON');
+                
+            } else {
+                // MySQL configuration (default)
+                $dsn = sprintf(
+                    'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
+                    $dbConfig['host'] ?? 'localhost',
+                    $dbConfig['port'] ?? 3306,
+                    $dbConfig['name'] ?? 'cureconnect_db'
+                );
+
+                $this->database = new PDO(
+                    $dsn,
+                    $dbConfig['username'] ?? 'root',
+                    $dbConfig['password'] ?? '',
+                    [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                        PDO::ATTR_EMULATE_PREPARES => false
+                    ]
+                );
+            }
         }
     }
 
@@ -158,9 +202,9 @@ class Application
     private function initializeTwig(): void
     {
         $templatesPath = $this->config['app']['templates_path'] ?? $this->rootPath . '/templates';
-        if (class_exists('Twig\Environment')) {
-            $loader = new FilesystemLoader($templatesPath);
-            $this->twig = new Environment($loader, [
+        if (class_exists(\Twig\Environment::class)) {
+            $loader = new \Twig\Loader\FilesystemLoader($templatesPath);
+            $this->twig = new \Twig\Environment($loader, [
                 'cache' => $this->config['app']['environment'] === 'production' ? $this->config['app']['cache_path'] : false,
                 'debug' => $this->config['app']['debug'] ?? true
             ]);
@@ -170,9 +214,11 @@ class Application
         }
 
         // Add global variables
-        $this->twig->addGlobal('app_name', $this->config['app']['name']);
-        $this->twig->addGlobal('assets_url', $this->config['app']['assets_url']);
-        $this->twig->addGlobal('base_url', $this->config['app']['base_url']);
+        if (method_exists($this->twig, 'addGlobal')) {
+            $this->twig->addGlobal('app_name', $this->config['app']['name'] ?? 'CureConnect');
+            $this->twig->addGlobal('assets_url', $this->config['app']['assets_url'] ?? '/assets');
+            $this->twig->addGlobal('base_url', $this->config['app']['base_url'] ?? '/');
+        }
     }
 
     /**
@@ -188,34 +234,35 @@ class Application
      */
     private function initializeRoutes(): void
     {
-        $this->routes = new RouteCollection();
+        $this->routes = [];
 
-        // Define routes
-        $this->routes->add('home', new Route('/', [
-            '_controller' => 'CureConnect\Controller\HomeController::index'
-        ]));
-
-        $this->routes->add('about', new Route('/about', [
-            '_controller' => 'CureConnect\Controller\PageController::about'
-        ]));
-
-        $this->routes->add('contact', new Route('/contact', [
-            '_controller' => 'CureConnect\Controller\PageController::contact'
-        ]));
-
-        $this->routes->add('gallery', new Route('/gallery', [
-            '_controller' => 'CureConnect\Controller\PageController::gallery'
-        ]));
-
-        $this->routes->add('government_schemes', new Route('/government-schemes', [
-            '_controller' => 'CureConnect\Controller\PageController::governmentSchemes'
-        ]));
+        // Define routes as simple array
+        $this->routes = [
+            '/' => [
+                'controller' => 'CureConnect\Controller\HomeController',
+                'method' => 'index'
+            ],
+            '/about' => [
+                'controller' => 'CureConnect\Controller\PageController',
+                'method' => 'about'
+            ],
+            '/contact' => [
+                'controller' => 'CureConnect\Controller\PageController',
+                'method' => 'contact'
+            ],
+            '/gallery' => [
+                'controller' => 'CureConnect\Controller\PageController',
+                'method' => 'gallery'
+            ],
+            '/government-schemes' => [
+                'controller' => 'CureConnect\Controller\PageController',
+                'method' => 'governmentSchemes'
+            ]
+        ];
     }
 
     /**
      * Handle incoming request and return response
-     *
-     * @return Response
      */
     public function handleRequest()
     {
@@ -238,8 +285,6 @@ class Application
             }
 
             return $this->handleNotFound();
-        } catch (ResourceNotFoundException $e) {
-            return $this->handleNotFound();
         } catch (\Exception $e) {
             return $this->handleError($e);
         }
@@ -247,25 +292,24 @@ class Application
 
     /**
      * Handle 404 errors
-     *
-     * @return Response
      */
-    private function handleNotFound(): Response
+    private function handleNotFound()
     {
         $content = $this->twig->render('errors/404.html.twig', [
             'title' => 'Page Not Found'
         ]);
 
-        return new Response($content, 404);
+        if (class_exists(\Symfony\Component\HttpFoundation\Response::class)) {
+            return new \Symfony\Component\HttpFoundation\Response($content, 404);
+        } else {
+            return new \CureConnect\Core\SimpleResponse($content, 404);
+        }
     }
 
     /**
      * Handle general errors
-     *
-     * @param \Exception $e Exception
-     * @return Response
      */
-    private function handleError(\Exception $e): Response
+    private function handleError(\Exception $e)
     {
         if ($this->config['app']['debug']) {
             $content = '<h1>Error</h1><pre>' . $e->getMessage() . "\n" . $e->getTraceAsString() . '</pre>';
@@ -275,7 +319,11 @@ class Application
             ]);
         }
 
-        return new Response($content, 500);
+        if (class_exists(\Symfony\Component\HttpFoundation\Response::class)) {
+            return new \Symfony\Component\HttpFoundation\Response($content, 500);
+        } else {
+            return new \CureConnect\Core\SimpleResponse($content, 500);
+        }
     }
 
     // Getters for dependency injection
@@ -310,6 +358,37 @@ class Application
     public function getRequest(): object
     {
         return $this->request;
+    }
+
+    /**
+     * Get default configuration
+     */
+    private function getDefaultConfig(): array
+    {
+        return [
+            'app' => [
+                'name' => 'CureConnect Medical Tourism Portal',
+                'version' => '1.0.0',
+                'environment' => 'development',
+                'debug' => true,
+                'timezone' => 'Asia/Kolkata',
+                'base_url' => 'http://localhost/CureConnect',
+                'assets_url' => 'http://localhost/CureConnect/assets',
+                'templates_path' => 'templates',
+                'cache_path' => 'var/cache',
+                'logs_path' => 'var/logs'
+            ],
+            'database' => [
+                'driver' => 'sqlite',
+                'name' => ':memory:',
+                'host' => '',
+                'port' => '',
+                'username' => '',
+                'password' => '',
+                'charset' => 'utf8'
+            ],
+            'services' => []
+        ];
     }
 }
 

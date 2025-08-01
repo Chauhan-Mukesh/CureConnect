@@ -379,7 +379,152 @@ function throttle(func, limit) {
     };
 }
 
+// --- Article Page Specific Functions ---
+function initializeArticleFeatures() {
+    // Reading Progress Bar
+    const progressBar = document.getElementById('reading-progress');
+    const article = document.querySelector('.article-body');
+    
+    if (progressBar && article) {
+        window.addEventListener('scroll', function() {
+            const articleTop = article.offsetTop - 100;
+            const articleHeight = article.offsetHeight;
+            const windowHeight = window.innerHeight;
+            const scrollTop = window.pageYOffset;
+            
+            if (scrollTop >= articleTop) {
+                const progress = Math.min(
+                    ((scrollTop - articleTop) / (articleHeight - windowHeight)) * 100,
+                    100
+                );
+                progressBar.style.width = Math.max(progress, 0) + '%';
+            } else {
+                progressBar.style.width = '0%';
+            }
+        });
+    }
+    
+    // Smooth scroll for table of contents links
+    document.querySelectorAll('.table-of-contents a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+}
+
+// Initialize article features if we're on an article page
+if (document.querySelector('.article-body')) {
+    initializeArticleFeatures();
+}
+
+// --- Gallery Page Specific Functions ---
+function initializeGalleryFeatures() {
+    // Load More functionality
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const hiddenItems = document.querySelectorAll('.gallery-hidden');
+    
+    if (loadMoreBtn && hiddenItems.length > 0) {
+        loadMoreBtn.addEventListener('click', function() {
+            hiddenItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.remove('d-none');
+                    // Re-initialize AOS for newly shown items
+                    if (typeof AOS !== 'undefined') {
+                        AOS.refresh();
+                    }
+                }, index * 100);
+            });
+            
+            loadMoreBtn.style.display = 'none';
+        });
+    }
+    
+    // Lightbox functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxClose = document.getElementById('lightbox-close');
+    const galleryItems = document.querySelectorAll('[data-lightbox]');
+    
+    galleryItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const imageSrc = this.getAttribute('data-lightbox');
+            const imageTitle = this.getAttribute('data-title');
+            
+            lightboxImage.src = imageSrc;
+            lightboxImage.alt = imageTitle;
+            lightbox.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+    
+    // Close lightbox
+    function closeLightbox() {
+        lightbox.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+    
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', closeLightbox);
+    }
+    
+    if (lightbox) {
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    }
+    
+    // Close lightbox with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && lightbox && lightbox.classList.contains('show')) {
+            closeLightbox();
+        }
+    });
+}
+
+// Initialize gallery features if we're on a gallery page
+if (document.querySelector('.gallery-grid')) {
+    initializeGalleryFeatures();
+}
+
+// --- Home Page Specific Functions ---
+function initializeHomePage() {
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+}
+
+// Initialize home page features if we're on home page
+if (document.querySelector('.hero-section')) {
+    initializeHomePage();
+}
+
 // Export functions for potential use in other scripts
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { debounce, throttle };
+    module.exports = { 
+        debounce, 
+        throttle, 
+        initializeArticleFeatures, 
+        initializeGalleryFeatures, 
+        initializeHomePage 
+    };
 }

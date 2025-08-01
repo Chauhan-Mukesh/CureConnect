@@ -3,44 +3,6 @@
 {% block head %}
     <!-- AOS (Animate on Scroll) Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Blog Theme CSS -->
-    <link rel="stylesheet" href="{{ assets_url }}/css/blog-theme.css">
-    
-    <style>
-        .contact-image {
-            background: linear-gradient(rgba(142, 68, 173, 0.1), rgba(52, 152, 219, 0.1)), 
-                        url('https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=1470&auto=format&fit=crop') center/cover;
-            border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
-        }
-        
-        .contact-section-wrapper {
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            background: var(--bs-tertiary-bg);
-        }
-        
-        .contact-info-card {
-            background: var(--bs-body-bg);
-            border: 1px solid var(--bs-border-color);
-            border-radius: var(--border-radius-md);
-            transition: all var(--transition-speed) ease;
-        }
-        
-        .contact-info-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .contact-info-card .icon {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-        }
-        
-        #form-success-message {
-            display: none;
-        }
-    </style>
 {% endblock %}
 
 {% block main %}
